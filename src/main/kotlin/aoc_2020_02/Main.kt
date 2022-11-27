@@ -1,5 +1,6 @@
 package aoc_2020_02
 
+import test
 import java.io.File
 
 data class PasswordEntry(val first: Int, val second: Int, val char: Char, val password: String)
@@ -23,12 +24,6 @@ fun solveSecond(input: List<String>): String = input.map(String::toPasswordEntry
         entry.password[entry.first - 1], entry.password[entry.second - 1]
     ).count { it == entry.char } == 1
 }.toString()
-
-fun test(input: List<String>, expected: String, solver: (List<String>) -> String): String =
-    solver(input).let { actual ->
-        if (actual != expected) "Example failed. $expected expected, got $actual."
-        else "Example succeeded!"
-    }
 
 fun main() {
     val pathPrefix = "./src/main/kotlin/aoc_2020_02"

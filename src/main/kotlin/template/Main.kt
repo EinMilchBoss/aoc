@@ -1,5 +1,6 @@
 package template
 
+import test
 import java.io.File
 
 fun solveFirst(input: List<String>): String {
@@ -9,14 +10,6 @@ fun solveFirst(input: List<String>): String {
 fun solveSecond(input: List<String>): String {
     return ""
 }
-
-fun test(input: List<String>, expected: String, solver: (List<String>) -> String): String =
-    solver(input).let { actual ->
-        if (actual != expected)
-            "Example failed. $expected expected, got $actual."
-        else
-            "Example succeeded!"
-    }
 
 fun main() {
     val pathPrefix = "./src/main/kotlin/[...]"

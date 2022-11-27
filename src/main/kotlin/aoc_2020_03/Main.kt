@@ -1,5 +1,6 @@
 package aoc_2020_03
 
+import test
 import java.io.File
 
 fun walkPath(input: List<String>, right: Int, down: Int): Int {
@@ -27,12 +28,6 @@ fun solveSecond(input: List<String>): String = listOf(
     walkPath(input, 7, 1),
     walkPath(input, 1, 2)
 ).map(Int::toLong).reduce { acc, i -> acc * i }.toString()
-
-fun test(input: List<String>, expected: String, solver: (List<String>) -> String): String =
-    solver(input).let { actual ->
-        if (actual != expected) "Example failed. $expected expected, got $actual."
-        else "Example succeeded!"
-    }
 
 fun main() {
     val pathPrefix = "./src/main/kotlin/aoc_2020_03"
