@@ -1,18 +1,23 @@
 package aoc_2022_01
 
-import lineSeparatedBlocks
 import test
 import java.io.File
 
-fun solveFirst(input: List<String>): String {
-    val elfCalories = input.lineSeparatedBlocks { it == "" }.map { it.map(String::toInt) }
-    return elfCalories.maxOfOrNull { it.sum() }.toString()
-}
+fun solveFirst(input: List<String>): String =
+    input.joinToString("\n")
+        .split("\n\n")
+        .map { it.split("\n").map(String::toInt) }
+        .maxOf { it.sum() }
+        .toString()
 
-fun solveSecond(input: List<String>): String {
-    val elfCalories = input.lineSeparatedBlocks { it == "" }.map { it.map(String::toInt) }
-    return elfCalories.map { it.sum() }.sortedByDescending { it }.take(3).sum().toString()
-}
+fun solveSecond(input: List<String>): String =
+    input.joinToString("\n")
+        .split("\n\n")
+        .map { it.split("\n").map(String::toInt).sum() }
+        .sortedByDescending { it }
+        .take(3)
+        .sum()
+        .toString()
 
 fun main() {
     val pathPrefix = "./src/main/kotlin/aoc_2022_01"
