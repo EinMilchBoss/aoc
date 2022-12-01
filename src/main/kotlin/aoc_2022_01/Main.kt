@@ -3,17 +3,18 @@ package aoc_2022_01
 import test
 import java.io.File
 
-fun solveFirst(input: List<String>): String =
-    input.joinToString("\n")
+fun List<String>.splitBlockSums() =
+    this.joinToString("\n")
         .split("\n\n")
-        .map { it.split("\n").map(String::toInt) }
-        .maxOf { it.sum() }
+        .map { it.split("\n").map(String::toInt).sum() }
+
+fun solveFirst(input: List<String>): String =
+    input.splitBlockSums()
+        .max()
         .toString()
 
 fun solveSecond(input: List<String>): String =
-    input.joinToString("\n")
-        .split("\n\n")
-        .map { it.split("\n").map(String::toInt).sum() }
+    input.splitBlockSums()
         .sortedByDescending { it }
         .take(3)
         .sum()
