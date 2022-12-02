@@ -75,11 +75,11 @@ internal class UtilKtTest {
 
         assertEquals(
             0,
-            array.relativeValue(10)
+            array.relativeValue(5)
         )
 
         assertEquals(
-            9,
+            4,
             array.relativeValue(-1)
         )
     }
