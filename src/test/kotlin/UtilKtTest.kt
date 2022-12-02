@@ -47,4 +47,40 @@ internal class UtilKtTest {
             input.lineSeparatedBlocks { it == "\n" }
         )
     }
+
+    @Test
+    fun testRelativeValue() {
+        val list = List(10) { it }
+        val array = arrayOf(0, 1, 2, 3, 4)
+
+        assertEquals(
+            0,
+            list.relativeValue(0)
+        )
+
+        assertEquals(
+            9,
+            list.relativeValue(9)
+        )
+
+        assertEquals(
+            0,
+            list.relativeValue(10)
+        )
+
+        assertEquals(
+            9,
+            list.relativeValue(-1)
+        )
+
+        assertEquals(
+            0,
+            array.relativeValue(10)
+        )
+
+        assertEquals(
+            9,
+            array.relativeValue(-1)
+        )
+    }
 }

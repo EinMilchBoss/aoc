@@ -21,3 +21,17 @@ fun List<String>.lineSeparatedBlocks(condition: (String) -> Boolean): List<List<
     }
     return iterate(0, 0, mutableListOf())
 }
+
+fun <T> List<T>.relativeValue(index: Int): T =
+    if (index in indices)
+        this[index]
+    else
+        if (index < 0) this[index + size]
+        else this[index - size]
+
+fun <T> Array<T>.relativeValue(index: Int): T =
+    if (index in indices)
+        this[index]
+    else
+        if (index < 0) this[index + size]
+        else this[index - size]
