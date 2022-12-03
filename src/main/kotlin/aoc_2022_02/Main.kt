@@ -52,19 +52,19 @@ data class ResultRound(val opponent: Command, val result: Result) {
 
 fun String.translateCommand(): Command =
     listOf(
-    listOf("A", "X") to Command.ROCK,
-    listOf("B", "Y") to Command.PAPER,
-    listOf("C", "Z") to Command.SCISSORS
-).first { (from, _) ->
+        listOf("A", "X") to Command.ROCK,
+        listOf("B", "Y") to Command.PAPER,
+        listOf("C", "Z") to Command.SCISSORS
+    ).first { (from, _) ->
         from.any { this == it }
     }.second
 
 fun String.translateResult(): Result =
     listOf(
-    "X" to Result.LOSE,
-    "Y" to Result.DRAW,
-    "Z" to Result.WIN
-).first { (from, _) ->
+        "X" to Result.LOSE,
+        "Y" to Result.DRAW,
+        "Z" to Result.WIN
+    ).first { (from, _) ->
         this == from
     }.second
 
