@@ -1,6 +1,6 @@
 package template
 
-import test
+import utils.test
 import java.io.File
 
 fun solveFirst(input: List<String>): String {

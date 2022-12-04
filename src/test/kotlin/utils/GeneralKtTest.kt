@@ -1,8 +1,10 @@
+package utils
+
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
 
-internal class UtilKtTest {
+internal class GeneralKtTest {
     @Test
     fun testTest() {
         val input = listOf(

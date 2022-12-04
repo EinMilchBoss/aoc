@@ -1,6 +1,6 @@
-package aoc_2020_02
+package year_2020.day_02
 
-import test
+import utils.test
 import java.io.File
 
 data class PasswordEntry(val first: Int, val second: Int, val char: Char, val password: String)
@@ -26,7 +26,7 @@ fun solveSecond(input: List<String>): String = input.map(String::toPasswordEntry
 }.toString()
 
 fun main() {
-    val pathPrefix = "./src/main/kotlin/aoc_2020_02"
+    val pathPrefix = "./src/main/kotlin/year_2020/day_02"
 
     val exampleInput = File("$pathPrefix/example.txt").readLines()
     println("First test: ${test(exampleInput, "2", ::solveFirst)}")

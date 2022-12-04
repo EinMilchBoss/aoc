@@ -1,6 +1,6 @@
-package aoc_2022_04
+package year_2022.day_04
 
-import test
+import utils.test
 import java.io.File
 
 fun List<String>.solve(condition: (Pair<IntRange, IntRange>) -> Boolean): Int =
@@ -27,7 +27,7 @@ fun solveSecond(input: List<String>): String =
     }.toString()
 
 fun main() {
-    val pathPrefix = "./src/main/kotlin/aoc_2022_04"
+    val pathPrefix = "./src/main/kotlin/year_2022/day_04"
 
     val exampleInput = File("$pathPrefix/example.txt").readLines()
     println("First test: ${test(exampleInput, "2", ::solveFirst)}")

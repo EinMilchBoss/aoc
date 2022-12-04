@@ -1,6 +1,6 @@
-package aoc_2020_01
+package year_2020.day_01
 
-import test
+import utils.test
 import java.io.File
 
 fun multiplyTwoComplements(items: List<Int>, total: Int): Int =
@@ -30,7 +30,7 @@ fun solveSecond(input: List<String>): String {
 }
 
 fun main() {
-    val pathPrefix = "./src/main/kotlin/aoc_2020_01"
+    val pathPrefix = "./src/main/kotlin/year_2020/day_01"
 
     val exampleInput = File("$pathPrefix/example.txt").readLines()
     println("First test: ${test(exampleInput, "514579", ::solveFirst)}")

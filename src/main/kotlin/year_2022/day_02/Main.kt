@@ -1,7 +1,6 @@
-package aoc_2022_02
+package year_2022.day_02
 
-import relativeValue
-import test
+import utils.*
 import java.io.File
 
 enum class Result(val score: Int) {
@@ -89,7 +88,7 @@ fun solveSecond(input: List<String>): String =
         .toString()
 
 fun main() {
-    val pathPrefix = "./src/main/kotlin/aoc_2022_02"
+    val pathPrefix = "./src/main/kotlin/year_2022/day_02"
 
     val exampleInput = File("$pathPrefix/example.txt").readLines()
     println("First test: ${test(exampleInput, "15", ::solveFirst)}")

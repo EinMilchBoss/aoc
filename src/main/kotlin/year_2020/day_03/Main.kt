@@ -1,6 +1,6 @@
-package aoc_2020_03
+package year_2020.day_03
 
-import test
+import utils.test
 import java.io.File
 
 fun walkPath(input: List<String>, right: Int, down: Int): Int {
@@ -30,7 +30,7 @@ fun solveSecond(input: List<String>): String = listOf(
 ).map(Int::toLong).reduce { acc, i -> acc * i }.toString()
 
 fun main() {
-    val pathPrefix = "./src/main/kotlin/aoc_2020_03"
+    val pathPrefix = "./src/main/kotlin/year_2020/day_03"
 
     val exampleInput = File("$pathPrefix/example.txt").readLines()
     println("First test: ${test(exampleInput, "7", ::solveFirst)}")

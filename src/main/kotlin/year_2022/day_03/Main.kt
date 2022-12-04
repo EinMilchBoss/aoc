@@ -1,6 +1,6 @@
-package aoc_2022_03
+package year_2022.day_03
 
-import test
+import utils.test
 import java.io.File
 
 fun Char.priority(): Int =
@@ -29,7 +29,7 @@ fun solveSecond(input: List<String>): String =
         .toString()
 
 fun main() {
-    val pathPrefix = "./src/main/kotlin/aoc_2022_03"
+    val pathPrefix = "./src/main/kotlin/year_2022/day_03"
 
     val exampleInput = File("$pathPrefix/example.txt").readLines()
     println("First test: ${test(exampleInput, "157", ::solveFirst)}")
