@@ -37,3 +37,13 @@ fun <T> Array<T>.relativeValue(index: Int): T =
     else
         if (index < 0) this[index + size]
         else this[index - size]
+
+// 12345 pop 3
+// return 345
+// list = 12
+
+fun <T> MutableList<T>.pop(n: Int): List<T> {
+    return this.takeLast(n).also {
+        repeat(n) { this.removeLast() }
+    }
+}

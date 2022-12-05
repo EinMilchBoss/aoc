@@ -85,4 +85,33 @@ internal class GeneralKtTest {
             array.relativeValue(-1)
         )
     }
+
+    @Test
+    fun testPop() {
+        val differentElementList = MutableList(10) { it }
+        val sameElementList = MutableList(10) { 0 }
+
+        val differentListPopped = differentElementList.pop(5)
+        val sameListPopped = sameElementList.pop(5)
+
+        assertEquals(
+            listOf(0, 1, 2, 3, 4),
+            differentElementList
+        )
+
+        assertEquals(
+            listOf(5, 6, 7, 8, 9),
+            differentListPopped
+        )
+
+        assertEquals(
+            listOf(0, 0, 0, 0, 0),
+            sameElementList
+        )
+
+        assertEquals(
+            listOf(0, 0, 0, 0, 0),
+            sameListPopped
+        )
+    }
 }
