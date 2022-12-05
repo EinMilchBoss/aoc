@@ -6,18 +6,6 @@ import java.util.*
 
 data class Instruction(val amount: Int, val from: Int, val to: Int)
 
-fun List<CrateStack>.performAll(
-    instructions: List<Instruction>,
-    shift: (List<Char>) -> List<Char>
-): List<CrateStack> =
-    also {
-        instructions.forEach { instruction ->
-            it[instruction.to - 1].pushAll(
-                shift(it[instruction.from - 1].pop(instruction.amount))
-            )
-        }
-    }
-
 class CrateStack : Stack<Char>() {
     fun peekOrNull(): Char? =
         try {
@@ -29,9 +17,21 @@ class CrateStack : Stack<Char>() {
     fun pushAll(elements: List<Char>): List<Char> =
         elements.onEach { push(it) }
 
-    fun pop(n: Int) =
+    fun pop(n: Int): List<Char> =
         List(n) { pop() }
 }
+
+fun List<CrateStack>.performAll(
+    instructions: List<Instruction>,
+    shift: (List<Char>) -> List<Char>
+): List<CrateStack> =
+    also {
+        instructions.forEach { instruction ->
+            it[instruction.to - 1].pushAll(
+                shift(it[instruction.from - 1].pop(instruction.amount))
+            )
+        }
+    }
 
 fun List<CrateStack>.result(): String =
     joinToString("") { it.peekOrNull()?.toString() ?: "" }
