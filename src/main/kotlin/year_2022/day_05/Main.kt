@@ -58,21 +58,22 @@ fun String.parseInstructions(): List<Instruction> =
                 .let { Instruction(it[1].toInt(), it[3].toInt(), it[5].toInt()) }
         }
 
-fun List<String>.solve(algorithm: (Pair<List<CrateStack>, List<Instruction>>) -> String): String =
+fun List<String>.solve(algorithm: (Pair<List<CrateStack>, List<Instruction>>) -> List<CrateStack>): String =
     joinToString("\n")
         .split("\n\n")
         .let { (crateBlock, instructionBlock) ->
             algorithm(crateBlock.parseCrates() to instructionBlock.parseInstructions())
         }
+        .result()
 
 fun solveFirst(input: List<String>): String =
     input.solve { (crates, instructions) ->
-        crates.performAll(instructions) { it }.result()
+        crates.performAll(instructions) { it }
     }
 
 fun solveSecond(input: List<String>): String =
     input.solve { (crates, instructions) ->
-        crates.performAll(instructions) { it.reversed() }.result()
+        crates.performAll(instructions) { it.reversed() }
     }
 
 fun main() {
