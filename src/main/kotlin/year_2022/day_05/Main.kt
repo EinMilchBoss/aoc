@@ -1,38 +1,36 @@
 package year_2022.day_05
 
-import utils.pop
 import utils.test
 import java.io.File
 import java.util.*
-import javax.swing.SortOrder
 
 data class Instruction(val amount: Int, val from: Int, val to: Int)
 
-fun List<Instruction>.performAll(
-    crates: List<CrateStack>,
-    shift: (destination: CrateStack, values: List<Char>) -> Unit
+fun List<CrateStack>.performAll(
+    instructions: List<Instruction>,
+    shift: (List<Char>) -> List<Char>
 ): List<CrateStack> =
-    crates.also {
-        forEach { instruction ->
-            shift(
-                crates[instruction.to - 1],
-                crates[instruction.from - 1].pop(instruction.amount)
+    also {
+        instructions.forEach { instruction ->
+            it[instruction.to - 1].pushAll(
+                shift(it[instruction.from - 1].pop(instruction.amount))
             )
         }
     }
 
-data class CrateStack(private val values: MutableList<Char>) {
+class CrateStack : Stack<Char>() {
     fun peekOrNull(): Char? =
-        values.lastOrNull()
+        try {
+            peek()
+        } catch (_: EmptyStackException) {
+            null
+        }
 
-    fun push(element: Char) =
-        values.add(element)
-
-    fun push(elements: List<Char>) =
-        values.addAll(elements)
+    fun pushAll(elements: List<Char>): List<Char> =
+        elements.onEach { push(it) }
 
     fun pop(n: Int) =
-        values.pop(n)
+        List(n) { pop() }
 }
 
 fun List<CrateStack>.result(): String =
@@ -42,15 +40,14 @@ fun String.parseCrates(): List<CrateStack> =
     split("\n")
         .dropLast(1)
         .map { line ->
-            (1..33 step 4).mapNotNull { index ->
-                line.getOrElse(index) { ' ' }
+            (1..33 step 4).map { crateIndex ->
+                line.getOrNull(crateIndex)
+                    ?.let { if (!it.isWhitespace()) it else null }
             }
         }
-        .foldRight(List(9) { CrateStack(mutableListOf()) }) { chars, acc ->
-            acc.also { stacks ->
-                stacks.forEachIndexed { index, stack ->
-                    chars[index].let { if (!it.isWhitespace()) stack.push(it) }
-                }
+        .foldRight(List(9) { CrateStack() }) { chars, acc ->
+            acc.onEachIndexed { index, stack ->
+                chars[index]?.let { stack.push(it) }
             }
         }
 
@@ -61,31 +58,21 @@ fun String.parseInstructions(): List<Instruction> =
                 .let { Instruction(it[1].toInt(), it[3].toInt(), it[5].toInt()) }
         }
 
-fun List<String>.parse(): Pair<List<CrateStack>, List<Instruction>> =
+fun List<String>.solve(algorithm: (Pair<List<CrateStack>, List<Instruction>>) -> String): String =
     joinToString("\n")
         .split("\n\n")
         .let { (crateBlock, instructionBlock) ->
-            Pair(
-                crateBlock.parseCrates(),
-                instructionBlock.parseInstructions()
-            )
+            algorithm(crateBlock.parseCrates() to instructionBlock.parseInstructions())
         }
-
-fun List<String>.solve(logic: (Pair<List<CrateStack>, List<Instruction>>) -> String): String =
-    parse().let(logic)
 
 fun solveFirst(input: List<String>): String =
     input.solve { (crates, instructions) ->
-        instructions.performAll(crates) { destination, values ->
-            destination.push(values.reversed())
-        }.result()
+        crates.performAll(instructions) { it }.result()
     }
 
 fun solveSecond(input: List<String>): String =
     input.solve { (crates, instructions) ->
-        instructions.performAll(crates) { destination, values ->
-            destination.push(values)
-        }.result()
+        crates.performAll(instructions) { it.reversed() }.result()
     }
 
 fun main() {
