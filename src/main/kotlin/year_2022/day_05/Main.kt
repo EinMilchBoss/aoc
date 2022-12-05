@@ -8,6 +8,19 @@ import javax.swing.SortOrder
 
 data class Instruction(val amount: Int, val from: Int, val to: Int)
 
+fun List<Instruction>.performAll(
+    crates: List<CrateStack>,
+    shift: (destination: CrateStack, values: List<Char>) -> Unit
+): List<CrateStack> =
+    crates.also {
+        forEach { instruction ->
+            shift(
+                crates[instruction.to - 1],
+                crates[instruction.from - 1].pop(instruction.amount)
+            )
+        }
+    }
+
 data class CrateStack(private val values: MutableList<Char>) {
     fun peekOrNull(): Char? =
         values.lastOrNull()
@@ -21,6 +34,9 @@ data class CrateStack(private val values: MutableList<Char>) {
     fun pop(n: Int) =
         values.pop(n)
 }
+
+fun List<CrateStack>.result(): String =
+    joinToString("") { it.peekOrNull()?.toString() ?: "" }
 
 fun String.parseCrates(): List<CrateStack> =
     split("\n")
@@ -55,29 +71,21 @@ fun List<String>.parse(): Pair<List<CrateStack>, List<Instruction>> =
             )
         }
 
-fun List<String>.solve(logic: (Pair<List<CrateStack>, List<Instruction>>) -> List<String>): String =
-    parse().let(logic).joinToString("")
+fun List<String>.solve(logic: (Pair<List<CrateStack>, List<Instruction>>) -> String): String =
+    parse().let(logic)
 
 fun solveFirst(input: List<String>): String =
     input.solve { (crates, instructions) ->
-        instructions.forEach { instruction ->
-            crates[instruction.from - 1].pop(instruction.amount)
-                .let { popped ->
-                    crates[instruction.to - 1].push(popped.reversed())
-                }
-        }
-        crates.map { it.peekOrNull()?.toString() ?: "" }
+        instructions.performAll(crates) { destination, values ->
+            destination.push(values.reversed())
+        }.result()
     }
 
 fun solveSecond(input: List<String>): String =
     input.solve { (crates, instructions) ->
-        instructions.forEach { instruction ->
-            crates[instruction.from - 1].pop(instruction.amount)
-                .let { removed ->
-                    crates[instruction.to - 1].push(removed)
-                }
-        }
-        crates.map { it.peekOrNull()?.toString() ?: "" }
+        instructions.performAll(crates) { destination, values ->
+            destination.push(values)
+        }.result()
     }
 
 fun main() {
