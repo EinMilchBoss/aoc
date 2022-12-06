@@ -15,7 +15,7 @@ fun <T> Array<T>.relativeValue(index: Int): T =
         else this[index - size]
 
 fun <T> MutableList<T>.pop(n: Int): List<T> {
-    return this.takeLast(n).also {
-        repeat(n) { this.removeLast() }
+    return takeLast(n).also {
+        repeat(n) { removeLast() }
     }
 }
