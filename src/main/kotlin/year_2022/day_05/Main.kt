@@ -26,9 +26,9 @@ fun List<CrateStack>.performAll(
     shift: (List<Char>) -> List<Char>
 ): List<CrateStack> =
     also {
-        instructions.forEach { instruction ->
-            it[instruction.to - 1].pushAll(
-                shift(it[instruction.from - 1].pop(instruction.amount))
+        instructions.forEach { (amount, from, to) ->
+            it[to - 1].pushAll(
+                shift(it[from - 1].pop(amount))
             )
         }
     }
