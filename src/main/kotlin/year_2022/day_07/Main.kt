@@ -6,13 +6,10 @@ import java.io.File
 data class Dialog(val input: String, val output: List<String>)
 
 data class FileSystem(val root: Directory = Directory("/", null)) {
-    fun filterDirectories(predicate: (size: Int) -> Boolean): List<Directory> {
-        fun iterate(currentDirectory: Directory): List<Directory> {
-            return if (predicate(currentDirectory.size())) {
-                listOf(currentDirectory) + currentDirectory.directories.flatMap { directory -> iterate(directory) }
-            } else
-                currentDirectory.directories.flatMap { directory -> iterate(directory) }
-        }
+    fun filterDirectories(predicate: (Directory) -> Boolean): List<Directory> {
+        fun iterate(currentDirectory: Directory): List<Directory> =
+            if (predicate(currentDirectory)) listOf(currentDirectory) + currentDirectory.directories.flatMap(::iterate)
+            else currentDirectory.directories.flatMap(::iterate)
         return iterate(root)
     }
 
@@ -55,7 +52,7 @@ data class FileSystem(val root: Directory = Directory("/", null)) {
             else parent!!
 
         fun size(): Int =
-            files.sumOf { it.size } + directories.sumOf { it.size() }
+            files.sumOf(File::size) + directories.sumOf(Directory::size)
     }
 }
 
@@ -81,36 +78,29 @@ fun FileSystem.explore(dialogs: List<Dialog>): FileSystem {
 
 fun List<String>.parse(): List<Dialog> =
     joinToString("\n")
-        .split("$")
-        .filterNot(String::isBlank)
+        .split("\n$ ")
         .drop(1)
         .map { dialog ->
-            dialog.trim()
-                .split("\n")
-                .run {
-                    Dialog(first(), drop(1))
-                }
+            dialog.split("\n")
+                .run { Dialog(first(), drop(1)) }
         }
 
-fun solveFirst(input: List<String>): String {
-    val inter = FileSystem().explore(input.parse())
-        .filterDirectories { it <= 100_000 }
-        .sumOf { it.size() }
+fun List<String>.solve(algorithm: FileSystem.() -> Int): String =
+    FileSystem().explore(parse())
+        .run(algorithm)
+        .toString()
 
-    return inter.toString()
-}
+fun solveFirst(input: List<String>): String =
+    input.solve {
+        filterDirectories { it.size() <= 100_000 }
+            .sumOf(FileSystem.Directory::size)
+    }
 
-fun solveSecond(input: List<String>): String {
-    val fileSystem = FileSystem().explore(input.parse())
-    val maxUsedSpace = 40_000_000
-    val toBeDeleted = fileSystem.root.size() - maxUsedSpace
-
-    val inter = fileSystem
-        .filterDirectories { it >= toBeDeleted }
-        .minOf { it.size() }
-
-    return inter.toString()
-}
+fun solveSecond(input: List<String>): String =
+    input.solve {
+        filterDirectories { it.size() >= root.size() - 40_000_000 }
+            .minOf(FileSystem.Directory::size)
+    }
 
 fun main() {
     val pathPrefix = "./src/main/kotlin/year_2022/day_07"
