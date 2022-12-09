@@ -50,7 +50,7 @@ fun solveFirst(input: List<String>): String =
         .run {
             listOf(
                 this,
-                this.map(List<Tree>::reversed),
+                map(List<Tree>::reversed),
                 rowsToCols(),
                 rowsToCols().map(List<Tree>::reversed)
             ).flatMap { it.flatMap(List<Tree>::visibleFromGround) }
