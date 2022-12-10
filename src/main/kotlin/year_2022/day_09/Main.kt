@@ -69,12 +69,12 @@ fun Char.toStep(): Position =
     }
 
 fun List<String>.solve(knotAmount: Int): String =
-    Rope(knotAmount).run {
+    Rope(knotAmount).let { rope ->
         parse()
             .flatMap { (direction, stepAmount) ->
                 List(stepAmount) {
-                    move(direction.toStep())
-                    tail
+                    rope.move(direction.toStep())
+                    rope.tail
                 }
             }
             .toSet()
