@@ -7,7 +7,7 @@ data class Command(val instruction: String, val parameter: Int?)
 
 data class RegisterState(val during: Int, val after: Int)
 
-typealias RegisterHistory = MutableMap<Int, RegisterState>
+typealias RegisterHistory = Map<Int, RegisterState>
 typealias MutableRegisterHistory = MutableMap<Int, RegisterState>
 
 typealias Crt = List<List<Char>>
