@@ -33,6 +33,8 @@ class PacketElementIterator(content: String) : Iterator<PacketElement> {
         return nextItem
     }
 
+    private fun relevantContentWindow(): String = unwrappedContent.substring(nextStartIndex)
+
     private fun String.getNextElement(): PacketElement {
         return if (isPacketList()) {
             val endIndex = findIndexOfClosingBracket()
@@ -41,8 +43,6 @@ class PacketElementIterator(content: String) : Iterator<PacketElement> {
             ValueElement(readUntilNextComma())
         }
     }
-
-    private fun relevantContentWindow(): String = unwrappedContent.substring(nextStartIndex)
 
     private fun String.isPacketList(): Boolean = startsWith('[')
 
