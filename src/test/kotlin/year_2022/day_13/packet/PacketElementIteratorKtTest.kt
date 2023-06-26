@@ -1,17 +1,21 @@
-package year_2022.day_13
+package year_2022.day_13.packet
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-internal class PacketElementIteratorTestKt {
+internal class PacketElementIteratorKtTest {
+    private fun String.getIteratorValues(): List<String> =
+        packetElementIterator().collect()
+
     private fun PacketElementIterator.collect(): List<String> =
-        asSequence().map(PacketElement::get).toList()
+        asSequence().map { it.content }
+            .toList()
 
     @Test
     fun `packetElementIterator only value elements`() {
         val expected = listOf("1", "22", "333")
 
-        val actual = "[1,22,333]".packetElementIterator().collect()
+        val actual = "[1,22,333]".getIteratorValues()
 
         assertEquals(expected, actual)
     }
@@ -20,7 +24,7 @@ internal class PacketElementIteratorTestKt {
     fun `packetElementIterator with list elements`() {
         val expected = listOf("1", "[22,333]", "4444")
 
-        val actual = "[1,[22,333],4444]".packetElementIterator().collect()
+        val actual = "[1,[22,333],4444]".getIteratorValues()
 
         assertEquals(expected, actual)
     }

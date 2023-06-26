@@ -1,11 +1,24 @@
 package year_2022.day_13
 
 import utils.test
+import year_2022.day_13.packet.parsePacketPairs
 import java.io.File
 
 fun solveFirst(input: List<String>): String {
-    val x = input.parsePacketPairs()
+    val x =
+        input.joinToString("\n")
+            .parsePacketPairs()
     println(x)
+
+    // #1) if ints: compare ints (left < right is expected)
+    // #2) if lists:
+    // compare first value, then second, etc. (see first rule)
+    // left list length < right list length is expected
+    // #3) if int to list / list to int:
+    // convert int to list
+    // see #2)
+
+
     return ""
 }
 
