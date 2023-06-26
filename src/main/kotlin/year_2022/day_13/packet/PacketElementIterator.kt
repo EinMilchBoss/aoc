@@ -5,11 +5,14 @@ fun String.packetElementIterator(): PacketElementIterator =
 
 class PacketElementIterator(content: String) : Iterator<PacketElement> {
     private val unwrappedContent: String
-    private val commaOffset = 1
     private var nextStartIndex = 0
 
     init {
         unwrappedContent = content.unwrapOuterBrackets()
+    }
+
+    companion object {
+        private const val COMMA_OFFSET = 1
     }
 
     override fun hasNext(): Boolean =
@@ -26,7 +29,7 @@ class PacketElementIterator(content: String) : Iterator<PacketElement> {
         unwrappedContent.substring(nextStartIndex)
 
     private fun updateNextStartIndex(lengthOfNextPacketValue: Int) {
-        nextStartIndex += lengthOfNextPacketValue + commaOffset
+        nextStartIndex += lengthOfNextPacketValue + COMMA_OFFSET
     }
 }
 
