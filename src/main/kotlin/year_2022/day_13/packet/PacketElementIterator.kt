@@ -46,18 +46,26 @@ private fun String.readNextElement(): PacketElement =
     }
 
 private fun String.findIndexOfClosingBracket(): Int {
-    var bracketCounter = 0
-    for ((index, char) in this.withIndex()) {
-        when (char) {
-            '[' -> bracketCounter++
-            ']' -> bracketCounter--
-        }
+    tailrec fun iterate(bracketCounter: Int, index: Int, isFirstIteration: Boolean = false): Int {
+        if (!isFirstIteration && bracketCounter == 0)
+            return index - 1
 
-        if (bracketCounter == 0) {
-            return index
+        val nextIndex = index + 1
+        return when (get(index)) {
+            '[' -> iterate(bracketCounter + 1, nextIndex)
+            ']' -> iterate(bracketCounter - 1, nextIndex)
+            else -> iterate(bracketCounter, nextIndex)
         }
     }
-    throw UnevenBracketCountException()
+
+    fun tryIterate(): Int =
+        try {
+            iterate(0, 0, true)
+        } catch (cause: IndexOutOfBoundsException) {
+            throw UnevenBracketCountException(cause)
+        }
+
+    return tryIterate()
 }
 
 private fun String.isPacketList(): Boolean =
