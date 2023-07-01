@@ -1,13 +1,18 @@
 package year_2022.day_13.packet
 
-fun String.parsePacketPairs(): List<Pair<Packet, Packet>> {
+typealias PacketPair = Pair<Packet, Packet>
+
+fun String.parsePacketPairs(): List<PacketPair> {
     return split(getEmptyLineSeparator()).map { packetPairContent ->
         packetPairContent.lines()
-            .map { Packet(it.parseValueList()) }
+            .map(String::toPacket)
             .zipWithNext()
             .first()
     }
 }
+
+private fun String.toPacket(): Packet =
+    Packet(this.parseValueList())
 
 private fun getEmptyLineSeparator(): String =
     List(2) { System.lineSeparator() }.joinToString("")

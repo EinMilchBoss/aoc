@@ -3,7 +3,7 @@ package year_2022.day_13.packet
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-internal class PacketKtTest {
+internal class PacketPairKtTest {
     companion object {
         private val INPUT = listOf(
             "[1,2,3,4,5]",
