@@ -1,30 +1,23 @@
-package year_2022.day_13
+package year_2022.day_13.packet
 
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import year_2022.day_13.packet.Packet
-import year_2022.day_13.packet.PacketPair
-import year_2022.day_13.packet.PacketPairComparator
+import year_2022.day_13.packet.exception.IdenticalPacketsException
+import year_2022.day_13.packet.pair.PacketPair
+import year_2022.day_13.packet.pair.isInOrder
 
-internal class MainKtTest {
-    private fun PacketPair.computeActual() =
-        PacketPairComparator(this).isInOrder()
-
+internal class PacketPairComparatorKtTest {
     @Test
     fun isInOrder() {
         val packetPair = PacketPair(
             Packet(
                 Packet.List(
                     listOf(
-                        Packet.Value(1),
-                        Packet.List(
+                        Packet.Value(1), Packet.List(
                             listOf(
-                                Packet.Value(2),
-                                Packet.List(
+                                Packet.Value(2), Packet.List(
                                     listOf(
-                                        Packet.Value(3),
-                                        Packet.Value(4),
-                                        Packet.Value(5)
+                                        Packet.Value(3), Packet.Value(4), Packet.Value(5)
                                     )
                                 )
                             )
@@ -34,15 +27,11 @@ internal class MainKtTest {
             ), Packet(
                 Packet.List(
                     listOf(
-                        Packet.Value(1),
-                        Packet.List(
+                        Packet.Value(1), Packet.List(
                             listOf(
-                                Packet.Value(2),
-                                Packet.List(
+                                Packet.Value(2), Packet.List(
                                     listOf(
-                                        Packet.Value(3),
-                                        Packet.Value(4),
-                                        Packet.List(listOf(Packet.Value(6)))
+                                        Packet.Value(3), Packet.Value(4), Packet.List(listOf(Packet.Value(6)))
                                     )
                                 )
                             )
@@ -52,7 +41,7 @@ internal class MainKtTest {
             )
         )
 
-        val actual = packetPair.computeActual()
+        val actual = packetPair.isInOrder()
 
         assert(actual)
     }
@@ -75,7 +64,7 @@ internal class MainKtTest {
             )
         )
 
-        val actual = packetPair.computeActual()
+        val actual = packetPair.isInOrder()
 
         assert(actual)
     }
@@ -102,7 +91,7 @@ internal class MainKtTest {
             )
         )
 
-        val actual = packetPair.computeActual()
+        val actual = packetPair.isInOrder()
 
         assert(!actual)
     }
@@ -125,7 +114,7 @@ internal class MainKtTest {
             )
         )
 
-        val actual = packetPair.computeActual()
+        val actual = packetPair.isInOrder()
 
         assert(actual)
     }
@@ -148,7 +137,7 @@ internal class MainKtTest {
             )
         )
 
-        val actual = packetPair.computeActual()
+        val actual = packetPair.isInOrder()
 
         assert(actual)
     }
@@ -171,7 +160,7 @@ internal class MainKtTest {
             )
         )
 
-        val actual = packetPair.computeActual()
+        val actual = packetPair.isInOrder()
 
         assert(actual)
     }
@@ -198,7 +187,7 @@ internal class MainKtTest {
             )
         )
 
-        val actual = packetPair.computeActual()
+        val actual = packetPair.isInOrder()
 
         assert(!actual)
     }
@@ -217,7 +206,7 @@ internal class MainKtTest {
             )
         )
 
-        val actual = packetPair.computeActual()
+        val actual = packetPair.isInOrder()
 
         assert(!actual)
     }
@@ -240,6 +229,6 @@ internal class MainKtTest {
             )
         )
 
-        assertThrows<IdenticalPacketsException> { packetPair.computeActual() }
+        assertThrows<IdenticalPacketsException> { packetPair.isInOrder() }
     }
 }

@@ -2,22 +2,21 @@ package year_2022.day_13.packet
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import year_2022.day_13.packet.pair.PacketPair
+import year_2022.day_13.packet.pair.parsePacketPairs
 
-internal class PacketPairKtTest {
-    companion object {
-        private val INPUT = listOf(
+internal class PacketPairParserKtTest {
+    @Test
+    fun parsePacketPairs() {
+        val input = listOf(
             "[1,2,3,4,5]",
             "[10,20,30,40,50]",
             "",
             "[[1],[[]],[2,3],[40,50]]",
             "[[10],[[20]],[3],[400,5]]"
         ).joinToString("\n")
-    }
-
-    @Test
-    fun parsePacketPairs() {
         val expected = listOf(
-            Pair(
+            PacketPair(
                 Packet(
                     Packet.List(
                         listOf(
@@ -41,7 +40,7 @@ internal class PacketPairKtTest {
                     )
                 )
             ),
-            Pair(
+            PacketPair(
                 Packet(
                     Packet.List(
                         listOf(
@@ -65,7 +64,7 @@ internal class PacketPairKtTest {
             )
         )
 
-        val actual = INPUT.parsePacketPairs()
+        val actual = input.parsePacketPairs()
 
         assertEquals(expected, actual)
     }

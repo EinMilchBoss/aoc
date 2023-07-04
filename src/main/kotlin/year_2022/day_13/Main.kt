@@ -1,23 +1,15 @@
 package year_2022.day_13
 
 import utils.test
-import year_2022.day_13.packet.PacketPairComparator
-import year_2022.day_13.packet.parsePacketPairs
+import year_2022.day_13.packet.pair.parsePacketPairs
+import year_2022.day_13.packet.sumIndicesOfPairsInOrder
 import java.io.File
 
-class IdenticalPacketsException : Exception() {
-    override val message = "Packets are identical although they have to be different in order to compare them."
-}
-
-fun solveFirst(input: List<String>): String {
-    val comparator = input.joinToString("\n")
+fun solveFirst(input: List<String>): String =
+    input.joinToString("\n")
         .parsePacketPairs()
-        .mapIndexed { index, packetPair -> index + 1 to packetPair }
-        .filter { (_, packetPair) -> PacketPairComparator(packetPair).isInOrder() }
-        .sumOf { (index, _) -> index }
-
-    return comparator.toString()
-}
+        .sumIndicesOfPairsInOrder()
+        .toString()
 
 fun solveSecond(input: List<String>): String {
     return ""

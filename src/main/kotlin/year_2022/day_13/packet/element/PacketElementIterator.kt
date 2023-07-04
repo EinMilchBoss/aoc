@@ -1,4 +1,6 @@
-package year_2022.day_13.packet
+package year_2022.day_13.packet.element
+
+import year_2022.day_13.packet.exception.UnevenBracketCountException
 
 fun String.packetElementIterator(): PacketElementIterator =
     PacketElementIterator(this)

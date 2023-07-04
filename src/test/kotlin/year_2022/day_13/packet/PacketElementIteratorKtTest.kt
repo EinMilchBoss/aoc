@@ -2,6 +2,8 @@ package year_2022.day_13.packet
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import year_2022.day_13.packet.element.PacketElementIterator
+import year_2022.day_13.packet.element.packetElementIterator
 
 internal class PacketElementIteratorKtTest {
     private fun String.getIteratorValues(): List<String> =
