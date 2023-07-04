@@ -4,10 +4,14 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import year_2022.day_13.packet.Packet
 import year_2022.day_13.packet.PacketPair
+import year_2022.day_13.packet.PacketPairComparator
 
 internal class MainKtTest {
+    private fun PacketPair.computeActual() =
+        PacketPairComparator(this).isInOrder()
+
     @Test
-    fun isInRightOrder() {
+    fun isInOrder() {
         val packetPair = PacketPair(
             Packet(
                 Packet.List(
@@ -48,13 +52,13 @@ internal class MainKtTest {
             )
         )
 
-        val actual = packetPair.isInRightOrder()
+        val actual = packetPair.computeActual()
 
         assert(actual)
     }
 
     @Test
-    fun `isInRightOrder only packet values`() {
+    fun `isInOrder only packet values`() {
         val packetPair = PacketPair(
             Packet(
                 Packet.List(
@@ -71,13 +75,13 @@ internal class MainKtTest {
             )
         )
 
-        val actual = packetPair.isInRightOrder()
+        val actual = packetPair.computeActual()
 
         assert(actual)
     }
 
     @Test
-    fun `isInRightOrder with packet lists`() {
+    fun `isInOrder with packet lists`() {
         val packetPair = PacketPair(
             Packet(
                 Packet.List(
@@ -98,13 +102,13 @@ internal class MainKtTest {
             )
         )
 
-        val actual = packetPair.isInRightOrder()
+        val actual = packetPair.computeActual()
 
         assert(!actual)
     }
 
     @Test
-    fun `isInRightOrder returns after first difference`() {
+    fun `isInOrder returns after first difference`() {
         val packetPair = PacketPair(
             Packet(
                 Packet.List(
@@ -121,13 +125,13 @@ internal class MainKtTest {
             )
         )
 
-        val actual = packetPair.isInRightOrder()
+        val actual = packetPair.computeActual()
 
         assert(actual)
     }
 
     @Test
-    fun `isInRightOrder converts values into a list if necessary`() {
+    fun `isInOrder converts values into a list if necessary`() {
         val packetPair = PacketPair(
             Packet(
                 Packet.List(
@@ -144,13 +148,13 @@ internal class MainKtTest {
             )
         )
 
-        val actual = packetPair.isInRightOrder()
+        val actual = packetPair.computeActual()
 
         assert(actual)
     }
 
     @Test
-    fun `isInRightOrder takes the length of the packets into account`() {
+    fun `isInOrder takes the length of the packets into account`() {
         val packetPair = PacketPair(
             Packet(
                 Packet.List(
@@ -167,13 +171,13 @@ internal class MainKtTest {
             )
         )
 
-        val actual = packetPair.isInRightOrder()
+        val actual = packetPair.computeActual()
 
         assert(actual)
     }
 
     @Test
-    fun `isInRightOrder nested empty lists`() {
+    fun `isInOrder nested empty lists`() {
         val packetPair = PacketPair(
             Packet(
                 Packet.List(
@@ -194,13 +198,13 @@ internal class MainKtTest {
             )
         )
 
-        val actual = packetPair.isInRightOrder()
+        val actual = packetPair.computeActual()
 
         assert(!actual)
     }
 
     @Test
-    fun `isInRightOrder single value to empty list`() {
+    fun `isInOrder single value to empty list`() {
         val packetPair = PacketPair(
             Packet(
                 Packet.List(
@@ -213,13 +217,13 @@ internal class MainKtTest {
             )
         )
 
-        val actual = packetPair.isInRightOrder()
+        val actual = packetPair.computeActual()
 
         assert(!actual)
     }
 
     @Test
-    fun `isInRightOrder throws if packets are identical`() {
+    fun `isInOrder throws if packets are identical`() {
         val packetPair = PacketPair(
             Packet(
                 Packet.List(
@@ -236,6 +240,6 @@ internal class MainKtTest {
             )
         )
 
-        assertThrows<IdenticalPacketsException> { packetPair.isInRightOrder() }
+        assertThrows<IdenticalPacketsException> { packetPair.computeActual() }
     }
 }
