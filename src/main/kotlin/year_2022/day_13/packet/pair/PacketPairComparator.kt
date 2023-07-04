@@ -3,48 +3,71 @@ package year_2022.day_13.packet.pair
 import year_2022.day_13.packet.Packet
 import year_2022.day_13.packet.exception.IdenticalPacketsException
 
-fun PacketPair.isInOrder(): Boolean {
-    for (packetDataPair in toPacketDataPairs()) {
-        if (packetDataPair.areBothValues()) {
-            val (leftValue, rightValue) = packetDataPair.unwrapPacketDataPairValues()
-            return when {
+fun iterateAreBothValues(packetPair: PacketPair, packetDataPairs: List<Packet.DataPair>, index: Int): Boolean =
+    packetDataPairs[index].unwrapPacketDataPairValues()
+        .let { (leftValue, rightValue) ->
+            when {
                 leftValue < rightValue -> true
                 leftValue > rightValue -> false
-                else -> continue
+                else -> iterate(packetPair, packetDataPairs, index + 1)
             }
         }
 
-        if (packetDataPair.areBothLists()) {
-            try {
-                return packetDataPair.toPacketPair()
-                    .isInOrder()
-            } catch (_: IdenticalPacketsException) {
-                continue
-            }
-        }
-
-        val (left, right) = packetDataPair
-        if (left is Packet.Value && right is Packet.List) {
-            val newLeft = left.toPacketList()
-            try {
-                return PacketPair(Packet(newLeft), Packet(right)).isInOrder()
-            } catch (_: IdenticalPacketsException) {
-                continue
-            }
-        }
-        if (left is Packet.List && right is Packet.Value) {
-            val newRight = right.toPacketList()
-            try {
-                return PacketPair(Packet(left), Packet(newRight)).isInOrder()
-            } catch (_: IdenticalPacketsException) {
-                continue
-            }
+fun iterateAreBothLists(packetPair: PacketPair, packetDataPairs: List<Packet.DataPair>, index: Int): Boolean =
+    try {
+        val newPacketPair = packetDataPairs[index].toPacketPair()
+        iterate(
+            newPacketPair, newPacketPair
+                .toPacketDataPairs(), 0
+        )
+    } catch (_: IdenticalPacketsException) {
+        try {
+            iterate(packetPair, packetDataPairs, index + 1)
+        } catch (_: IdenticalPacketsException) {
+            packetPair
+                .isLeftPacketSmaller()
         }
     }
 
+fun iterateOneOfEach(packetPair: PacketPair, packetDataPairs: List<Packet.DataPair>, index: Int): Boolean {
+    val (left, right) = packetDataPairs[index]
+    val (newLeft, newRight) = listOf(left, right).map(Packet.Data::toPacketListIfValue)
+    return try {
+        val newPacketPair = PacketPair(Packet(newLeft), Packet(newRight))
+        iterate(newPacketPair, newPacketPair.toPacketDataPairs(), 0)
+    } catch (_: IdenticalPacketsException) {
+        try {
+            iterate(packetPair, packetDataPairs, index + 1)
+        } catch (_: IdenticalPacketsException) {
+            packetPair
+                .isLeftPacketSmaller()
+        }
+    }
+}
+
+fun iterate(packetPair: PacketPair, packetDataPairs: List<Packet.DataPair>, index: Int): Boolean {
+    return try {
+        val packetDataPair = packetDataPairs.getOrElse(index) { throw IdenticalPacketsException() }
+        when {
+            packetDataPair.areBothValues() -> iterateAreBothValues(packetPair, packetDataPairs, index)
+            packetDataPair.areBothLists() -> iterateAreBothLists(packetPair, packetDataPairs, index)
+            else -> iterateOneOfEach(packetPair, packetDataPairs, index)
+        }
+    } catch (_: IdenticalPacketsException) {
+        packetPair.isLeftPacketSmaller()
+    }
+}
+
+fun PacketPair.isInOrder(): Boolean {
+    return iterate(this, toPacketDataPairs(), 0)
+}
+
+private fun PacketPair.isLeftPacketSmaller(): Boolean {
+    val leftSize = left.data.values.size
+    val rightSize = right.data.values.size
     return when {
-        left.data.values.size < right.data.values.size -> true
-        left.data.values.size > right.data.values.size -> false
+        leftSize < rightSize -> true
+        leftSize > rightSize -> false
         else -> throw IdenticalPacketsException()
     }
 }
@@ -54,6 +77,12 @@ private fun Packet.DataPair.unwrapPacketDataPairValues(): Pair<Int, Int> =
 
 private fun Packet.DataPair.toPacketPair(): PacketPair =
     PacketPair(Packet(left as Packet.List), Packet(right as Packet.List))
+
+private fun Packet.Data.toPacketListIfValue(): Packet.List =
+    when (this) {
+        is Packet.Value -> this.toPacketList()
+        is Packet.List -> this
+    }
 
 private fun Packet.Value.toPacketList(): Packet.List =
     Packet.List(listOf(this))
