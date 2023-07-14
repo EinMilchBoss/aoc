@@ -1,8 +1,13 @@
 package year_2022.day_13.packet
 
 import year_2022.day_13.packet.pair.PacketPair
+import year_2022.day_13.packet.pair.isInOrder
 
-data class Packet(val data: List) {
+data class Packet(val data: List) : Comparable<Packet> {
+    override fun compareTo(other: Packet): Int =
+        if (PacketPair(this, other).isInOrder()) -1
+        else 1
+
     sealed class Data {
         fun toPacketListIfValue(): List =
             when (this) {
