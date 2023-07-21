@@ -17,7 +17,15 @@ fun String.partOne(): String {
     val sandSource = Coordinate(500, 0)
     val cave = Cave(parseRockPaths())
 
-    return ""
+    while (true) {
+        val previousAmountOfSandUnits = cave.caughtSandUnits().size
+        cave.dropSandUnitFrom(sandSource)
+        if (previousAmountOfSandUnits == cave.caughtSandUnits().size) {
+            break
+        }
+    }
+
+    return cave.caughtSandUnits().size.toString()
 }
 
 fun String.partTwo(): String =
