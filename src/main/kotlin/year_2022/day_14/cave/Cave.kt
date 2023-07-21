@@ -11,36 +11,44 @@ data class Cave(private val rockPaths: List<RockPath>) {
         caughtSandUnits
 
     fun dropSandUnitFrom(origin: Coordinate) {
-        if (origin.y >= maxY()) return
+        moveSandDown(origin)
+    }
 
-        val down = origin + Direction.DOWN.step
-        if (down.isBlocked()) {
-            val leftDiagonal = down + Direction.LEFT.step
-            val rightDiagonal = down + Direction.RIGHT.step
+    private tailrec fun moveSandDown(current: Coordinate) {
+        if (current.isLowerThanLowestRockWall()) return
 
-            if (!leftDiagonal.isBlocked()) {
-                dropSandUnitFrom(leftDiagonal)
-            } else if (!rightDiagonal.isBlocked()) {
-                dropSandUnitFrom(rightDiagonal)
-            } else {
-                caughtSandUnits.add(origin)
-            }
+        val fallenSand = current + Direction.DOWN.step
+        if (fallenSand.isBlocked()) {
+            moveSandDiagonally(current)
         } else {
-            dropSandUnitFrom(down)
+            moveSandDown(fallenSand)
+        }
+    }
+
+    private fun moveSandDiagonally(origin: Coordinate) {
+        val leftDiagonal = origin + Direction.DOWN.step + Direction.LEFT.step
+        val rightDiagonal = origin + Direction.DOWN.step + Direction.RIGHT.step
+        when {
+            !leftDiagonal.isBlocked() -> moveSandDown(leftDiagonal)
+            !rightDiagonal.isBlocked() -> moveSandDown(rightDiagonal)
+            else -> caughtSandUnits.add(origin)
         }
     }
 
     private fun Coordinate.isBlocked(): Boolean =
         this in this@Cave.rockCoordinates || this in this@Cave.caughtSandUnits
 
-    private fun rockCoordinatesOfPaths(): Set<Coordinate> =
-        rockPaths.flatMap(RockPath::rockCoordinatesOfPath)
-            .toSet()
+    private fun Coordinate.isLowerThanLowestRockWall(): Boolean =
+        y >= lowestYOfRockWall()
 
-    private fun maxY(): Int =
+    private fun lowestYOfRockWall(): Int =
         try {
             rockCoordinates.maxOf { (_, y) -> y }
         } catch (_: NoSuchElementException) {
             0
         }
+
+    private fun rockCoordinatesOfPaths(): Set<Coordinate> =
+        rockPaths.flatMap(RockPath::rockCoordinatesOfPath)
+            .toSet()
 }

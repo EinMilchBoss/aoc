@@ -11,12 +11,12 @@ class CaveTest {
     private fun Cave.setOfCaughtSandUnits(): Set<Coordinate> =
         caughtSandUnits().toSet()
 
-    private fun createOneWallCave(from: Coordinate, to: Coordinate): Cave =
+    private fun createCaveWithOneRockWall(from: Coordinate, to: Coordinate): Cave =
         Cave(listOf(RockPath(listOf(from, to))))
 
     @Test
     fun `dropSandUnitFrom gets caught by wall`() {
-        val cave = createOneWallCave(Coordinate(-1, 5), Coordinate(1, 5))
+        val cave = createCaveWithOneRockWall(Coordinate(-1, 5), Coordinate(1, 5))
 
         cave.dropSandUnitFrom(origin)
 
@@ -25,7 +25,7 @@ class CaveTest {
 
     @Test
     fun `dropSandUnitFrom moves diagonal if blocked`() {
-        val cave = createOneWallCave(Coordinate(-2, 5), Coordinate(2, 5))
+        val cave = createCaveWithOneRockWall(Coordinate(-2, 5), Coordinate(2, 5))
 
         repeat(4) {
             cave.dropSandUnitFrom(origin)
@@ -38,7 +38,7 @@ class CaveTest {
 
     @Test
     fun `dropSandUnitFrom moves diagonal if blocked more than once`() {
-        val cave = createOneWallCave(
+        val cave = createCaveWithOneRockWall(
             Coordinate(-3, 5), Coordinate(3, 5)
         )
 
@@ -54,7 +54,7 @@ class CaveTest {
 
     @Test
     fun `dropSandUnitFrom moves diagonal if blocked more than once and piles up`() {
-        val cave = createOneWallCave(
+        val cave = createCaveWithOneRockWall(
             Coordinate(-3, 5), Coordinate(3, 5)
         )
 
