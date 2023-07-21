@@ -4,7 +4,7 @@ import year_2022.day_14.orientation.Coordinate
 import year_2022.day_14.orientation.Direction
 
 data class Cave(private val rockPaths: List<RockPath>) {
-    private val rockCoordinates: Set<Coordinate> = rockCoordinatesOfPaths()
+    private val rockCoordinates = rockCoordinatesOfPaths()
     private val caughtSandUnits = mutableListOf<Coordinate>()
 
     fun caughtSandUnits(): List<Coordinate> =
