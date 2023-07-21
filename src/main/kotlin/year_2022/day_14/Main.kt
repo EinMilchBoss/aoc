@@ -3,18 +3,19 @@ package year_2022.day_14
 import year_2022.day_14.aoc.*
 import year_2022.day_14.cave.Cave
 import year_2022.day_14.cave.parseRockPaths
+import year_2022.day_14.orientation.Coordinate
 
 fun String.partOne(): String {
-    // build cave
-    // split input
-    // - each line separate by " -> "
-    // convert coordinates to usable data class
-    //
-
+    // cave saves every sand unit into a mutable list of coordinates
+    // dropSandUnitFrom(origin: Coordinate) does not try any further if sand.y <= lowestRockCoordinate.y
+    // logic:
+    // val originalSandAmount = cave.caughtSandUnits()
+    // cave.dropSandUnitFrom(sandSource)
+    // if (cave.sandUnits == originalSandAmount) {
+    // return cave.sandUnits()
+    // } else /* iterate further */
+    val sandSource = Coordinate(500, 0)
     val cave = Cave(parseRockPaths())
-
-    println(parseRockPaths())
-    println(cave.rockCoordinates)
 
     return ""
 }
