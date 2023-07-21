@@ -6,26 +6,10 @@ import year_2022.day_14.cave.parseRockPaths
 import year_2022.day_14.orientation.Coordinate
 
 fun String.partOne(): String {
-    // cave saves every sand unit into a mutable list of coordinates
-    // dropSandUnitFrom(origin: Coordinate) does not try any further if sand.y <= lowestRockCoordinate.y
-    // logic:
-    // val originalSandAmount = cave.caughtSandUnits()
-    // cave.dropSandUnitFrom(sandSource)
-    // if (cave.sandUnits == originalSandAmount) {
-    // return cave.sandUnits()
-    // } else /* iterate further */
     val sandSource = Coordinate(500, 0)
     val cave = Cave(parseRockPaths())
-
-    while (true) {
-        val previousAmountOfSandUnits = cave.caughtSandUnits().size
-        cave.dropSandUnitFrom(sandSource)
-        if (previousAmountOfSandUnits == cave.caughtSandUnits().size) {
-            break
-        }
-    }
-
-    return cave.caughtSandUnits().size.toString()
+    return cave.maxAmountOfSandUnits(sandSource)
+        .toString()
 }
 
 fun String.partTwo(): String =
