@@ -9,13 +9,16 @@ fun Cave.maxAmountOfSandUntilSourceBlocked(source: Coordinate): Int {
 }
 
 private fun Cave.addFloorRockCoordinates(source: Coordinate) {
+    rockCoordinates.addAll(maxFloorRockPath(source).rockCoordinatesOfPath())
+}
+
+private fun Cave.maxFloorRockPath(source: Coordinate): RockPath {
     val yOfFloor = lowestYOfRockWall() + 2
     val widthPerSide = yOfFloor + 1
-    val floor = RockPath(
+    return RockPath(
         listOf(
             Coordinate(source.x - widthPerSide, source.y + yOfFloor),
             Coordinate(source.x + widthPerSide, source.y + yOfFloor)
         )
     )
-    rockCoordinates.addAll(floor.rockCoordinatesOfPath())
 }

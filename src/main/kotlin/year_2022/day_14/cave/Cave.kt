@@ -68,34 +68,4 @@ class Cave(rockPaths: List<RockPath>) {
 
     private fun Coordinate.isBlocked(): Boolean =
         this in this@Cave.rockCoordinates || this in this@Cave.caughtSandCoordinates
-
-    override fun toString(): String {
-        val allCoordinates = rockCoordinates + caughtSandCoordinates
-        val leftMost = allCoordinates.minBy { (x, _) -> x }.x
-        val rightMost = allCoordinates.maxBy { (x, _) -> x }.x
-
-        val grouped = allCoordinates.groupBy { (_, y) -> y }
-
-        val output = mutableListOf<String>()
-
-        for (rowIndex in 0..lowestYOfRockWall()) {
-            if (rowIndex !in grouped.keys) continue
-
-            val line = mutableListOf<Char>()
-            for (columnIndex in leftMost..rightMost) {
-                line.add(
-                    if (Coordinate(columnIndex, rowIndex) in caughtSandCoordinates) {
-                        'O'
-                    } else if (Coordinate(columnIndex, rowIndex) in rockCoordinates) {
-                        '#'
-                    } else {
-                        '.'
-                    }
-                )
-            }
-            output.add(line.joinToString(""))
-        }
-
-        return output.joinToString("\n")
-    }
 }
