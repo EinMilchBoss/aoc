@@ -30,9 +30,7 @@ class Cave(rockPaths: List<RockPath>) {
     }
 
     fun dropSandFromSource(source: Coordinate) {
-        if (source.isBlocked()) {
-            return
-        } else moveSandVertically(source)
+        if (!source.isBlocked()) moveSandVertically(source)
     }
 
     private tailrec fun moveSandVertically(current: Coordinate) {
