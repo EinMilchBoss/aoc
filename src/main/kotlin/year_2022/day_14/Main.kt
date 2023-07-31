@@ -25,10 +25,14 @@ fun Coordinate.hasReached(y: Int): Boolean =
 fun String.partTwo(): String {
     val sandSource = Coordinate(500, 0)
     val cave = Cave(parseRockPaths())
+//
+//    val x = cave.maxAmountOfSandUnitsUntilSandBlocksSource(sandSource)
+//
+//    return x.toString()
 
-    val x = cave.maxAmountOfSandUnitsUntilSandBlocksSource(sandSource)
+    cave.maxAmountOfSandUntilSourceBlocked()
 
-    return x.toString()
+    return ""
 }
 
 fun main() {
@@ -37,7 +41,7 @@ fun main() {
     val two = Part.two(inputs, String::partTwo)
 
     println(one.testProtocol("24"))
-    //println(two.testProtocol("93"))
+    println(two.testProtocol("93"))
 
     println("Part 1: ${one.run()}")
     //println("Part 2: ${two.run()}")

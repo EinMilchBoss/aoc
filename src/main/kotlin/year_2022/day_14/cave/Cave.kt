@@ -3,13 +3,14 @@ package year_2022.day_14.cave
 import year_2022.day_14.orientation.Coordinate
 import year_2022.day_14.orientation.Direction
 
-data class Cave(private val rockPaths: List<RockPath>) {
-    val rockCoordinates = rockCoordinatesOfPaths()
-    internal val caughtSandUnits = mutableListOf<Coordinate>()
+class Cave(rockPaths: List<RockPath>) {
+    internal val rockCoordinates: MutableSet<Coordinate>
+    internal val caughtSandUnits: MutableList<Coordinate> = mutableListOf()
 
-    private fun rockCoordinatesOfPaths(): Set<Coordinate> =
-        rockPaths.flatMap(RockPath::rockCoordinatesOfPath)
-            .toSet()
+    init {
+        rockCoordinates = rockPaths.flatMap(RockPath::rockCoordinatesOfPath)
+            .toMutableSet()
+    }
 
     fun caughtSandUnits(): List<Coordinate> =
         caughtSandUnits
@@ -38,7 +39,7 @@ data class Cave(private val rockPaths: List<RockPath>) {
     private fun Coordinate.isLowerThanLowestRockWall(): Boolean =
         y >= lowestYOfRockWall()
 
-    private fun lowestYOfRockWall(): Int =
+    fun lowestYOfRockWall(): Int =
         try {
             rockCoordinates.maxOf { (_, y) -> y }
         } catch (_: NoSuchElementException) {
