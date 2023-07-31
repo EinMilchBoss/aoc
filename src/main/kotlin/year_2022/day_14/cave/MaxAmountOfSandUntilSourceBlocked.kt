@@ -1,0 +1,3 @@
+package year_2022.day_14.cave
+
+class MaxAmountOfSandUntilSourceBlocked

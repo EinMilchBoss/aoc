@@ -4,30 +4,15 @@ import year_2022.day_14.orientation.Coordinate
 import year_2022.day_14.orientation.Direction
 
 data class Cave(private val rockPaths: List<RockPath>) {
-    private val rockCoordinates = rockCoordinatesOfPaths()
-    private val caughtSandUnits = mutableListOf<Coordinate>()
+    val rockCoordinates = rockCoordinatesOfPaths()
+    internal val caughtSandUnits = mutableListOf<Coordinate>()
+
+    private fun rockCoordinatesOfPaths(): Set<Coordinate> =
+        rockPaths.flatMap(RockPath::rockCoordinatesOfPath)
+            .toSet()
 
     fun caughtSandUnits(): List<Coordinate> =
         caughtSandUnits
-
-    fun maxAmountOfSandUnits(source: Coordinate): Int {
-        dropSandUntilItFallsIndefinitely(source)
-        return caughtSandUnits.size
-    }
-
-    private tailrec fun dropSandUntilItFallsIndefinitely(source: Coordinate) {
-        val (before, after) = amountOfCaughtSandUnitsBeforeAndAfterDroppingSand(source)
-        if (before < after) {
-            dropSandUntilItFallsIndefinitely(source)
-        }
-    }
-
-    private fun amountOfCaughtSandUnitsBeforeAndAfterDroppingSand(source: Coordinate): Pair<Int, Int> {
-        val previousAmountOfSandUnits = caughtSandUnits.size
-        dropSandUnitFrom(source)
-        val currentAmountOfSandUnits = caughtSandUnits.size
-        return previousAmountOfSandUnits to currentAmountOfSandUnits
-    }
 
     tailrec fun dropSandUnitFrom(current: Coordinate) {
         if (current.isLowerThanLowestRockWall()) return
@@ -62,8 +47,4 @@ data class Cave(private val rockPaths: List<RockPath>) {
 
     private fun Coordinate.isBlocked(): Boolean =
         this in this@Cave.rockCoordinates || this in this@Cave.caughtSandUnits
-
-    private fun rockCoordinatesOfPaths(): Set<Coordinate> =
-        rockPaths.flatMap(RockPath::rockCoordinatesOfPath)
-            .toSet()
 }
