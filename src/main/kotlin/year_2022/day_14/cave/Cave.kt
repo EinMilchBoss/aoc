@@ -5,24 +5,44 @@ import year_2022.day_14.orientation.Direction
 
 class Cave(rockPaths: List<RockPath>) {
     internal val rockCoordinates: MutableSet<Coordinate>
-    internal val caughtSandUnits: MutableList<Coordinate> = mutableListOf()
+    internal val caughtSandCoordinates: MutableList<Coordinate> = mutableListOf()
 
     init {
         rockCoordinates = rockPaths.flatMap(RockPath::rockCoordinatesOfPath)
             .toMutableSet()
     }
 
-    fun caughtSandUnits(): List<Coordinate> =
-        caughtSandUnits
+    fun caughtSandCoordinates(): List<Coordinate> =
+        caughtSandCoordinates
 
-    tailrec fun dropSandUnitFrom(current: Coordinate) {
+    tailrec fun dropSandUntilNothingChanges(source: Coordinate) {
+        val (before, after) = amountOfCaughtSandBeforeAndAfterDroppingSand(source)
+        if (before < after) {
+            dropSandUntilNothingChanges(source)
+        }
+    }
+
+    private fun amountOfCaughtSandBeforeAndAfterDroppingSand(source: Coordinate): Pair<Int, Int> {
+        val previousAmountOfSandUnits = caughtSandCoordinates.size
+        dropSandFromSource(source)
+        val currentAmountOfSandUnits = caughtSandCoordinates.size
+        return previousAmountOfSandUnits to currentAmountOfSandUnits
+    }
+
+    fun dropSandFromSource(source: Coordinate) {
+        if (source.isBlocked()) {
+            return
+        } else moveSandVertically(source)
+    }
+
+    private tailrec fun moveSandVertically(current: Coordinate) {
         if (current.isLowerThanLowestRockWall()) return
 
         val fallenSand = current + Direction.DOWN.step
         if (fallenSand.isBlocked()) {
             moveSandDiagonally(current)
         } else {
-            dropSandUnitFrom(fallenSand)
+            moveSandVertically(fallenSand)
         }
     }
 
@@ -30,9 +50,9 @@ class Cave(rockPaths: List<RockPath>) {
         val leftDiagonal = current + Direction.DOWN.step + Direction.LEFT.step
         val rightDiagonal = current + Direction.DOWN.step + Direction.RIGHT.step
         when {
-            !leftDiagonal.isBlocked() -> dropSandUnitFrom(leftDiagonal)
-            !rightDiagonal.isBlocked() -> dropSandUnitFrom(rightDiagonal)
-            else -> caughtSandUnits.add(current)
+            !leftDiagonal.isBlocked() -> moveSandVertically(leftDiagonal)
+            !rightDiagonal.isBlocked() -> moveSandVertically(rightDiagonal)
+            else -> caughtSandCoordinates.add(current)
         }
     }
 
@@ -47,5 +67,35 @@ class Cave(rockPaths: List<RockPath>) {
         }
 
     private fun Coordinate.isBlocked(): Boolean =
-        this in this@Cave.rockCoordinates || this in this@Cave.caughtSandUnits
+        this in this@Cave.rockCoordinates || this in this@Cave.caughtSandCoordinates
+
+    override fun toString(): String {
+        val allCoordinates = rockCoordinates + caughtSandCoordinates
+        val leftMost = allCoordinates.minBy { (x, _) -> x }.x
+        val rightMost = allCoordinates.maxBy { (x, _) -> x }.x
+
+        val grouped = allCoordinates.groupBy { (_, y) -> y }
+
+        val output = mutableListOf<String>()
+
+        for (rowIndex in 0..lowestYOfRockWall()) {
+            if (rowIndex !in grouped.keys) continue
+
+            val line = mutableListOf<Char>()
+            for (columnIndex in leftMost..rightMost) {
+                line.add(
+                    if (Coordinate(columnIndex, rowIndex) in caughtSandCoordinates) {
+                        'O'
+                    } else if (Coordinate(columnIndex, rowIndex) in rockCoordinates) {
+                        '#'
+                    } else {
+                        '.'
+                    }
+                )
+            }
+            output.add(line.joinToString(""))
+        }
+
+        return output.joinToString("\n")
+    }
 }

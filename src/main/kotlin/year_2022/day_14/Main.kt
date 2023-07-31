@@ -8,31 +8,16 @@ fun String.partOne(): String {
     val sandSource = Coordinate(500, 0)
     val cave = Cave(parseRockPaths())
     return cave.maxAmountOfSandUntilOverflow(sandSource)
+        .also { println(cave) }
         .toString()
 }
-
-fun Cave.maxAmountOfSandUnitsUntilSandBlocksSource(source: Coordinate): Int {
-
-
-    // dropSandUntilItFallsIndefinitely(source) { hasReached(yOfFloor) }
-
-    return caughtSandUnits().size
-}
-
-fun Coordinate.hasReached(y: Int): Boolean =
-    this.y == y
 
 fun String.partTwo(): String {
     val sandSource = Coordinate(500, 0)
     val cave = Cave(parseRockPaths())
-//
-//    val x = cave.maxAmountOfSandUnitsUntilSandBlocksSource(sandSource)
-//
-//    return x.toString()
-
-    cave.maxAmountOfSandUntilSourceBlocked()
-
-    return ""
+    return cave.maxAmountOfSandUntilSourceBlocked(sandSource)
+        .also { println(cave) }
+        .toString()
 }
 
 fun main() {
@@ -44,5 +29,5 @@ fun main() {
     println(two.testProtocol("93"))
 
     println("Part 1: ${one.run()}")
-    //println("Part 2: ${two.run()}")
+    println("Part 2: ${two.run()}")
 }

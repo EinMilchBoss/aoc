@@ -9,7 +9,7 @@ class CaveTest {
     private val origin = Coordinate(0, 0)
 
     private fun Cave.setOfCaughtSandUnits(): Set<Coordinate> =
-        caughtSandUnits().toSet()
+        caughtSandCoordinates().toSet()
 
     private fun createCaveWithOneRockWall(from: Coordinate, to: Coordinate): Cave =
         Cave(listOf(RockPath(listOf(from, to))))
@@ -18,7 +18,7 @@ class CaveTest {
     fun `dropSandUnitFrom gets caught by wall`() {
         val cave = createCaveWithOneRockWall(Coordinate(-1, 5), Coordinate(1, 5))
 
-        cave.dropSandUnitFrom(origin)
+        cave.dropSandFromSource(origin)
 
         assertEquals(setOf(Coordinate(0, 4)), cave.setOfCaughtSandUnits())
     }
@@ -28,7 +28,7 @@ class CaveTest {
         val cave = createCaveWithOneRockWall(Coordinate(-2, 5), Coordinate(2, 5))
 
         repeat(4) {
-            cave.dropSandUnitFrom(origin)
+            cave.dropSandFromSource(origin)
         }
 
         assertEquals(
@@ -43,7 +43,7 @@ class CaveTest {
         )
 
         repeat(5) {
-            cave.dropSandUnitFrom(origin)
+            cave.dropSandFromSource(origin)
         }
 
         assertEquals(
@@ -59,7 +59,7 @@ class CaveTest {
         )
 
         repeat(9) {
-            cave.dropSandUnitFrom(origin)
+            cave.dropSandFromSource(origin)
         }
 
         assertEquals(
@@ -80,8 +80,33 @@ class CaveTest {
     @Test
     fun `dropSandUnitFrom recognizes sand units falling into the abyss`() {
         val cave = Cave(emptyList())
-        val indefinitelyFallingSandUnit = { cave.dropSandUnitFrom(origin) }
+        val indefinitelyFallingSandUnit = { cave.dropSandFromSource(origin) }
 
         assertDoesNotThrow(indefinitelyFallingSandUnit)
+    }
+
+    @Test
+    fun `dropSandUnitFrom does not drop sand if source is blocked`() {
+        val cave = createCaveWithOneRockWall(
+            Coordinate(-3, 3), Coordinate(3, 3)
+        )
+
+        repeat(10) {
+            cave.dropSandFromSource(origin)
+        }
+
+        assertEquals(
+            setOf(
+                Coordinate(0, 2),
+                Coordinate(-1, 2),
+                Coordinate(1, 2),
+                Coordinate(0, 1),
+                Coordinate(-2, 2),
+                Coordinate(-1, 1),
+                Coordinate(2, 2),
+                Coordinate(1, 1),
+                Coordinate(0, 0)
+            ), cave.setOfCaughtSandUnits()
+        )
     }
 }
