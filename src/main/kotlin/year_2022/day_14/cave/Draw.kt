@@ -10,9 +10,9 @@ private const val AIR = '.'
 fun Cave.draw(): String {
     val allCoordinates = rockCoordinates + caughtSandCoordinates
     val bounds = widthBounds(allCoordinates)
-    val lines = mapOfLines(allCoordinates)
+    val rows = rowsGroupedByIndex(allCoordinates)
     return (0..lowestYOfRockWall()).joinToString("\n") { rowIndex ->
-        if (lines.isLineEmpty(rowIndex)) drawEmptyLine(bounds)
+        if (containsRowOnlyAir(rows, rowIndex)) drawLineOfAir(bounds)
         else drawLine(bounds, rowIndex)
     }
 }
@@ -23,13 +23,13 @@ private fun widthBounds(allCoordinates: Set<Coordinate>): Bounds =
         allCoordinates.extremeValueOfX(Set<Coordinate>::maxBy)
     )
 
-private fun mapOfLines(allCoordinates: Set<Coordinate>) =
+private fun rowsGroupedByIndex(allCoordinates: Set<Coordinate>) =
     allCoordinates.groupBy { (_, y) -> y }
 
-private fun Map<Int, *>.isLineEmpty(index: Int) =
-    index !in keys
+private fun containsRowOnlyAir(rows: Map<Int, *>, index: Int) =
+    index !in rows.keys
 
-private fun drawEmptyLine(bounds: Bounds): String =
+private fun drawLineOfAir(bounds: Bounds): String =
     String(CharArray(bounds.length) { AIR })
 
 private fun Set<Coordinate>.extremeValueOfX(algorithm: Set<Coordinate>.((Coordinate) -> Int) -> Coordinate): Int =
