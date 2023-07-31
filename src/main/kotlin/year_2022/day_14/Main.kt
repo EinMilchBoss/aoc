@@ -21,7 +21,7 @@ fun String.partTwo(): String {
 }
 
 fun main() {
-    val inputs = Inputs(Exercise(2022, 13))
+    val inputs = Inputs(Exercise(2022, 14))
     val one = Part.one(inputs, String::partOne)
     val two = Part.two(inputs, String::partTwo)
 
