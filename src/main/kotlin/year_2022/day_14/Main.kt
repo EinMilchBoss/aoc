@@ -29,6 +29,6 @@ fun main() {
     println(one.testProtocol("24"))
     println(two.testProtocol("93"))
 
-    println("Part 1: ${one.run()}")
-    println("Part 2: ${two.run()}")
+    println("Part 1:\n${one.run()}")
+    println("Part 2:\n${two.run()}")
 }
