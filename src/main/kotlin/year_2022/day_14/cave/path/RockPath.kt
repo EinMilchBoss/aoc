@@ -1,6 +1,7 @@
 package year_2022.day_14.cave.path
 
 import utils.orientation.Coordinate
+import utils.toPair
 
 data class RockPath(val coordinatesOfEnds: List<Coordinate>) {
     fun rockCoordinatesOfPath(): List<Coordinate> {
