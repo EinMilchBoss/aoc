@@ -1,7 +1,7 @@
 package year_2022.day_02
 
-import utils.*
-import java.io.File
+import utils.aoc.*
+import utils.relativeValue
 
 enum class Result(val score: Int) {
     WIN(6),
@@ -73,28 +73,30 @@ fun <T> List<String>.translateRounds(transform: (String, String) -> T): List<T> 
             .let { (first, second) -> transform(first, second) }
     }
 
-fun solveFirst(input: List<String>): String =
-    input.translateRounds { opponent, player ->
+fun String.partOne(): String =
+    lines().translateRounds { opponent, player ->
         CommandRound(opponent.translateCommand(), player.translateCommand())
-    }.map(CommandRound::points)
+    }
+        .map(CommandRound::points)
         .sum()
         .toString()
 
-fun solveSecond(input: List<String>): String =
-    input.translateRounds { opponent, result ->
+fun String.partTwo(): String =
+    lines().translateRounds { opponent, result ->
         ResultRound(opponent.translateCommand(), result.translateResult())
-    }.map(ResultRound::points)
+    }
+        .map(ResultRound::points)
         .sum()
         .toString()
 
 fun main() {
-    val pathPrefix = "./src/main/kotlin/year_2022/day_02"
+    val inputs = Inputs(Exercise(2022, 2))
+    val one = Part.one(inputs, String::partOne)
+    val two = Part.two(inputs, String::partTwo)
 
-    val exampleInput = File("$pathPrefix/example.txt").readLines()
-    println("First test: ${test(exampleInput, "15", ::solveFirst)}")
-    println("Second test: ${test(exampleInput, "12", ::solveSecond)}")
+    println(one.testProtocol("15"))
+    println(two.testProtocol("12"))
 
-    val input = File("$pathPrefix/input.txt").readLines()
-    println("First result: ${solveFirst(input)}")
-    println("Second result: ${solveSecond(input)}")
+    println("Part 1:\n${one.run()}")
+    println("Part 2:\n${two.run()}")
 }
