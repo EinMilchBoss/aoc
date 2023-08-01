@@ -1,4 +1,4 @@
-package year_2022.day_14.orientation
+package utils.orientation
 
 enum class Direction(val step: Coordinate) {
     DOWN(Coordinate(0, 1)),

@@ -1,4 +1,4 @@
-package year_2022.day_14.aoc
+package utils.aoc
 
 class Part private constructor(
     private val partNumber: Int,

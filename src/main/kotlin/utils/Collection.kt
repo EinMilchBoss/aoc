@@ -19,3 +19,6 @@ fun <T> MutableList<T>.pop(n: Int): List<T> {
         repeat(n) { removeLast() }
     }
 }
+
+fun <T> List<T>.toPair(): Pair<T, T> =
+    zipWithNext().first()

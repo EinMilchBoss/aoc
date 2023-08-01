@@ -1,7 +1,8 @@
 package year_2022.day_14.cave
 
-import year_2022.day_14.orientation.Coordinate
-import year_2022.day_14.orientation.Direction
+import utils.orientation.Coordinate
+import utils.orientation.Direction
+import year_2022.day_14.cave.path.RockPath
 
 class Cave(rockPaths: List<RockPath>) {
     internal val rockCoordinates: MutableSet<Coordinate>
