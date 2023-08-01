@@ -1,7 +1,6 @@
 package year_2022.day_09
 
-import utils.test
-import java.io.File
+import utils.aoc.*
 import kotlin.math.absoluteValue
 
 data class Command(val direction: Char, val stepCount: Int)
@@ -19,19 +18,24 @@ data class Rope(val knotAmount: Int) {
 
     var head: Position
         get() = knots.first()
-        set(value) { knots[0] = value }
+        set(value) {
+            knots[0] = value
+        }
 
     var tail: Position
         get() = knots.last()
-        set(value) { knots[knots.lastIndex] = value }
+        set(value) {
+            knots[knots.lastIndex] = value
+        }
 
     fun move(offset: Position) {
         head += offset
-        knots.indices.drop(1).forEach { knotIndex ->
-            if (!knots[knotIndex].isTouching(knots[knotIndex - 1])) {
-                knots[knotIndex] += knots[knotIndex].approximate(knots[knotIndex - 1])
+        knots.indices.drop(1)
+            .forEach { knotIndex ->
+                if (!knots[knotIndex].isTouching(knots[knotIndex - 1])) {
+                    knots[knotIndex] += knots[knotIndex].approximate(knots[knotIndex - 1])
+                }
             }
-        }
     }
 }
 
@@ -82,20 +86,20 @@ fun List<String>.solve(knotAmount: Int): String =
             .toString()
     }
 
-fun solveFirst(input: List<String>): String =
-    input.solve(2)
+fun String.partOne(): String =
+    lines().solve(2)
 
-fun solveSecond(input: List<String>): String =
-    input.solve(10)
+fun String.partTwo(): String =
+    lines().solve(10)
 
 fun main() {
-    val pathPrefix = "./src/main/kotlin/year_2022/day_09"
+    val inputs = Inputs(Exercise(2022, 9))
+    val one = Part.one(inputs, String::partOne)
+    val two = Part.two(inputs, String::partTwo)
 
-    val exampleInput = File("$pathPrefix/example.txt").readLines()
-    println("First test: ${test(exampleInput, "13", ::solveFirst)}")
-    println("Second test: ${test(exampleInput, "1", ::solveSecond)}")
+    println(one.testProtocol("13"))
+    println(two.testProtocol("1"))
 
-    val input = File("$pathPrefix/input.txt").readLines()
-    println("First result: ${solveFirst(input)}")
-    println("Second result: ${solveSecond(input)}")
+    println("Part 1:\n${one.run()}")
+    println("Part 2:\n${two.run()}")
 }
