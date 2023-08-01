@@ -1,7 +1,6 @@
 package year_2022.day_11
 
-import utils.test
-import java.io.File
+import utils.aoc.*
 import java.math.BigInteger
 
 data class Monkey(
@@ -9,7 +8,7 @@ data class Monkey(
     val operation: (BigInteger) -> BigInteger,
     val testDivisor: BigInteger,
     val monkeyOnTrue: Int,
-    val monkeyOnFalse: Int
+    val monkeyOnFalse: Int,
 ) {
     var inspectionCount = BigInteger("0")
         private set
@@ -55,14 +54,27 @@ fun List<String>.parse(): List<Monkey> =
             val (worryLevels, operation, test, monkeyOnTrue, monkeyOnFalse) = monkey
                 .split("\n")
                 .drop(1)
-                .map { it.split(": ").last() }
+                .map {
+                    it.split(": ")
+                        .last()
+                }
 
             Monkey(
-                worryLevels.split(", ").map(String::toBigInteger).toMutableList(),
-                operation.split(" = ").last().formulateOperation(),
-                test.split(" ").last().toBigInteger(),
-                monkeyOnTrue.split(" ").last().toInt(),
-                monkeyOnFalse.split(" ").last().toInt()
+                worryLevels.split(", ")
+                    .map(String::toBigInteger)
+                    .toMutableList(),
+                operation.split(" = ")
+                    .last()
+                    .formulateOperation(),
+                test.split(" ")
+                    .last()
+                    .toBigInteger(),
+                monkeyOnTrue.split(" ")
+                    .last()
+                    .toInt(),
+                monkeyOnFalse.split(" ")
+                    .last()
+                    .toInt()
             )
         }
 
@@ -78,8 +90,8 @@ fun List<String>.solve(algorithm: (List<Monkey>) -> Unit) =
         .highestMonkeyBusiness()
         .toString()
 
-fun solveFirst(input: List<String>): String =
-    input.solve { monkeys ->
+fun String.partOne(): String =
+    lines().solve { monkeys ->
         repeat(20) {
             monkeys.forEach { monkey ->
                 monkey.inspect()
@@ -89,9 +101,10 @@ fun solveFirst(input: List<String>): String =
         }
     }
 
-fun solveSecond(input: List<String>): String =
-    input.solve { monkeys ->
-        val divisorProduct = monkeys.map(Monkey::testDivisor).reduce { acc, current -> acc * current }
+fun String.partTwo(): String =
+    lines().solve { monkeys ->
+        val divisorProduct = monkeys.map(Monkey::testDivisor)
+            .reduce { acc, current -> acc * current }
         repeat(10_000) {
             monkeys.forEach { monkey ->
                 monkey.inspect(divisorProduct)
@@ -101,13 +114,13 @@ fun solveSecond(input: List<String>): String =
     }
 
 fun main() {
-    val pathPrefix = "./src/main/kotlin/year_2022/day_11"
+    val inputs = Inputs(Exercise(2022, 11))
+    val one = Part.one(inputs, String::partOne)
+    val two = Part.two(inputs, String::partTwo)
 
-    val exampleInput = File("$pathPrefix/example.txt").readLines()
-    println("First test: ${test(exampleInput, "10605", ::solveFirst)}")
-    println("Second test: ${test(exampleInput, "2713310158", ::solveSecond)}")
+    println(one.testProtocol("10605"))
+    println(two.testProtocol("2713310158"))
 
-    val input = File("$pathPrefix/input.txt").readLines()
-    println("First result: ${solveFirst(input)}")
-    println("Second result: ${solveSecond(input)}")
+    println("Part 1:\n${one.run()}")
+    println("Part 2:\n${two.run()}")
 }

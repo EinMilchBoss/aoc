@@ -1,4 +1,4 @@
-package year_2022.day_14.orientation
+package utils.orientation
 
 import year_2022.day_14.cave.IllegalRockPathException
 import kotlin.math.absoluteValue

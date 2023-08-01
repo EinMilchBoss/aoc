@@ -1,7 +1,6 @@
 package year_2022.day_03
 
-import utils.test
-import java.io.File
+import utils.aoc.*
 
 fun Char.priority(): Int =
     if (this in 'a'..'z') this - 'a' + 1
@@ -12,16 +11,16 @@ fun String.splitInHalf(): Pair<String, String> =
         take(halfSize) to takeLast(halfSize)
     }
 
-fun solveFirst(input: List<String>): String =
-    input.map(String::splitInHalf)
+fun String.partOne(): String =
+    lines().map(String::splitInHalf)
         .map { (compartmentA, compartmentB) ->
             compartmentA.first { it in compartmentB }
         }
         .sumOf(Char::priority)
         .toString()
 
-fun solveSecond(input: List<String>): String =
-    input.chunked(3)
+fun String.partTwo(): String =
+    lines().chunked(3)
         .map { (rucksackA, rucksackB, rucksackC) ->
             rucksackA.first { it in rucksackB && it in rucksackC }
         }
@@ -29,13 +28,13 @@ fun solveSecond(input: List<String>): String =
         .toString()
 
 fun main() {
-    val pathPrefix = "./src/main/kotlin/year_2022/day_03"
+    val inputs = Inputs(Exercise(2022, 3))
+    val one = Part.one(inputs, String::partOne)
+    val two = Part.two(inputs, String::partTwo)
 
-    val exampleInput = File("$pathPrefix/example.txt").readLines()
-    println("First test: ${test(exampleInput, "157", ::solveFirst)}")
-    println("Second test: ${test(exampleInput, "70", ::solveSecond)}")
+    println(one.testProtocol("157"))
+    println(two.testProtocol("70"))
 
-    val input = File("$pathPrefix/input.txt").readLines()
-    println("First result: ${solveFirst(input)}")
-    println("Second result: ${solveSecond(input)}")
+    println("Part 1:\n${one.run()}")
+    println("Part 2:\n${two.run()}")
 }

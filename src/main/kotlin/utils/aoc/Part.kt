@@ -1,4 +1,4 @@
-package year_2022.day_14.aoc
+package utils.aoc
 
 class Part private constructor(
     private val partNumber: Int,
@@ -23,8 +23,8 @@ class Part private constructor(
         val testResult = testResult(expected, algorithmResult)
         return arrayOf(
             "--- PART $partNumber ---",
-            "Expected: '$expected'",
-            "Actual:   '$algorithmResult'",
+            "Expected:\n$expected",
+            "Actual:\n$algorithmResult",
             "--- $testResult ---\n"
         ).joinToString("\n")
     }

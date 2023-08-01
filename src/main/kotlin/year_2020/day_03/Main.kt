@@ -1,7 +1,6 @@
 package year_2020.day_03
 
-import utils.test
-import java.io.File
+import utils.aoc.*
 
 fun walkPath(input: List<String>, right: Int, down: Int): Int {
     tailrec fun iterate(x: Int, y: Int, treeCount: Int): Int {
@@ -19,24 +18,30 @@ fun walkPath(input: List<String>, right: Int, down: Int): Int {
     return iterate(0, 0, 0)
 }
 
-fun solveFirst(input: List<String>): String = walkPath(input, 3, 1).toString()
+fun String.partOne(): String =
+    walkPath(lines(), 3, 1).toString()
 
-fun solveSecond(input: List<String>): String = listOf(
-    walkPath(input, 1, 1),
-    walkPath(input, 3, 1),
-    walkPath(input, 5, 1),
-    walkPath(input, 7, 1),
-    walkPath(input, 1, 2)
-).map(Int::toLong).reduce { acc, i -> acc * i }.toString()
+fun String.partTwo(): String =
+    lines().let { lines ->
+        listOf(
+            walkPath(lines, 1, 1),
+            walkPath(lines, 3, 1),
+            walkPath(lines, 5, 1),
+            walkPath(lines, 7, 1),
+            walkPath(lines, 1, 2)
+        ).map(Int::toLong)
+            .reduce { acc, i -> acc * i }
+            .toString()
+    }
 
 fun main() {
-    val pathPrefix = "./src/main/kotlin/year_2020/day_03"
+    val inputs = Inputs(Exercise(2020, 3))
+    val one = Part.one(inputs, String::partOne)
+    val two = Part.two(inputs, String::partTwo)
 
-    val exampleInput = File("$pathPrefix/example.txt").readLines()
-    println("First test: ${test(exampleInput, "7", ::solveFirst)}")
-    println("Second test: ${test(exampleInput, "336", ::solveSecond)}")
+    println(one.testProtocol("7"))
+    println(two.testProtocol("336"))
 
-    val input = File("$pathPrefix/input.txt").readLines()
-    println("First result: ${solveFirst(input)}")
-    println("Second result: ${solveSecond(input)}")
+    println("Part 1:\n${one.run()}")
+    println("Part 2:\n${two.run()}")
 }

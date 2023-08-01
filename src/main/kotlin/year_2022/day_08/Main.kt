@@ -1,7 +1,6 @@
 package year_2022.day_08
 
-import utils.test
-import java.io.File
+import utils.aoc.*
 
 data class Tree(val x: Int, val y: Int, val height: Int)
 
@@ -18,8 +17,11 @@ fun TreeGrid.scenicScore(tree: Tree): Int =
         this[tree.y].run { subList(0, tree.x).reversed() },
         rowsToCols()[tree.x].run { subList(tree.y + 1, size) },
         rowsToCols()[tree.x].run { subList(0, tree.y).reversed() },
-    ).map { it.visibleFromTreeHouse(tree).count() }
-        .reduce { acc, height -> acc * height}
+    ).map {
+        it.visibleFromTreeHouse(tree)
+            .count()
+    }
+        .reduce { acc, height -> acc * height }
 
 fun List<Tree>.visibleFromGround(): List<Tree> {
     tailrec fun iterate(index: Int, highest: Int, matches: List<Tree>): List<Tree> =
@@ -45,8 +47,8 @@ fun List<String>.toGrid(): TreeGrid =
             .mapIndexed { x, _ -> Tree(x, y, this[y][x].digitToInt()) }
     }
 
-fun solveFirst(input: List<String>): String =
-    input.toGrid()
+fun String.partOne(): String =
+    lines().toGrid()
         .run {
             listOf(
                 this,
@@ -59,8 +61,8 @@ fun solveFirst(input: List<String>): String =
         .count()
         .toString()
 
-fun solveSecond(input: List<String>): String =
-    input.toGrid()
+fun String.partTwo(): String =
+    lines().toGrid()
         .run {
             flatMap { trees -> trees.map(::scenicScore) }
         }
@@ -68,13 +70,13 @@ fun solveSecond(input: List<String>): String =
         .toString()
 
 fun main() {
-    val pathPrefix = "./src/main/kotlin/year_2022/day_08"
+    val inputs = Inputs(Exercise(2022, 8))
+    val one = Part.one(inputs, String::partOne)
+    val two = Part.two(inputs, String::partTwo)
 
-    val exampleInput = File("$pathPrefix/example.txt").readLines()
-    println("First test: ${test(exampleInput, "21", ::solveFirst)}")
-    println("Second test: ${test(exampleInput, "8", ::solveSecond)}")
+    println(one.testProtocol("21"))
+    println(two.testProtocol("8"))
 
-    val input = File("$pathPrefix/input.txt").readLines()
-    println("First result: ${solveFirst(input)}")
-    println("Second result: ${solveSecond(input)}")
+    println("Part 1:\n${one.run()}")
+    println("Part 2:\n${two.run()}")
 }

@@ -1,7 +1,7 @@
 package year_2022.day_13.packet
 
+import utils.toPair
 import year_2022.day_13.packet.pair.toPacket
-import year_2022.day_13.toPair
 
 private val dividerPackets = listOf(
     "[[2]]".toPacket(), "[[6]]".toPacket()

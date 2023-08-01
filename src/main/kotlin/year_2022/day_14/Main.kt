@@ -1,8 +1,9 @@
 package year_2022.day_14
 
-import year_2022.day_14.aoc.*
+import utils.aoc.*
+import utils.orientation.Coordinate
 import year_2022.day_14.cave.*
-import year_2022.day_14.orientation.Coordinate
+import year_2022.day_14.cave.path.parseRockPaths
 
 fun String.partOne(): String {
     val sandSource = Coordinate(500, 0)
@@ -28,6 +29,6 @@ fun main() {
     println(one.testProtocol("24"))
     println(two.testProtocol("93"))
 
-    println("Part 1: ${one.run()}")
-    println("Part 2: ${two.run()}")
+    println("Part 1:\n${one.run()}")
+    println("Part 2:\n${two.run()}")
 }

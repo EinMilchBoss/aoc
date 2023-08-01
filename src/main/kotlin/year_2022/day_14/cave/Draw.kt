@@ -1,7 +1,7 @@
 package year_2022.day_14.cave
 
-import year_2022.day_14.orientation.Coordinate
-import year_2022.day_14.util.Bounds
+import utils.orientation.Coordinate
+import year_2022.day_14.Bounds
 
 private const val ROCK = '#'
 private const val SAND = 'O'

@@ -2,7 +2,8 @@ package year_2022.day_14.cave
 
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
-import year_2022.day_14.orientation.Coordinate
+import utils.orientation.Coordinate
+import year_2022.day_14.cave.path.RockPath
 import kotlin.test.assertEquals
 
 class CaveTest {

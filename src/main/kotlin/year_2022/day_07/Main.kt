@@ -1,7 +1,6 @@
 package year_2022.day_07
 
-import utils.test
-import java.io.File
+import utils.aoc.*
 
 data class Dialog(val input: String, val output: List<String>)
 
@@ -16,9 +15,10 @@ data class FileSystem(val root: Directory = Directory("/", null)) {
     data class File(val name: String, val size: Int) {
         companion object {
             fun fromEntry(entry: String): File =
-                entry.split(" ").let { (size, name) ->
-                    File(name, size.toInt())
-                }
+                entry.split(" ")
+                    .let { (size, name) ->
+                        File(name, size.toInt())
+                    }
         }
     }
 
@@ -26,12 +26,13 @@ data class FileSystem(val root: Directory = Directory("/", null)) {
         val name: String,
         val parent: Directory?,
         val files: MutableList<File> = mutableListOf(),
-        val directories: MutableList<Directory> = mutableListOf()
+        val directories: MutableList<Directory> = mutableListOf(),
     ) {
         companion object {
             fun fromEntry(entry: String, parentDirectory: Directory): Directory =
                 Directory(
-                    entry.split(" ").last(),
+                    entry.split(" ")
+                        .last(),
                     parentDirectory
                 )
 
@@ -63,7 +64,10 @@ fun FileSystem.explore(dialogs: List<Dialog>): FileSystem {
         dialogs[dialogIndex].let { (input, output) ->
             if (input.startsWith("cd")) {
                 return iterate(
-                    currentDirectory.changeDirectory(input.split(' ').last()),
+                    currentDirectory.changeDirectory(
+                        input.split(' ')
+                            .last()
+                    ),
                     dialogIndex + 1
                 )
             }
@@ -90,26 +94,27 @@ fun List<String>.solve(algorithm: FileSystem.() -> Int): String =
         .run(algorithm)
         .toString()
 
-fun solveFirst(input: List<String>): String =
-    input.solve {
+fun String.partOne(): String =
+    lines().solve {
         filterDirectories { it.size() <= 100_000 }
             .sumOf(FileSystem.Directory::size)
     }
 
-fun solveSecond(input: List<String>): String =
-    input.solve {
+fun String.partTwo(): String =
+    lines().solve {
         filterDirectories { it.size() >= root.size() - 40_000_000 }
             .minOf(FileSystem.Directory::size)
     }
 
+
 fun main() {
-    val pathPrefix = "./src/main/kotlin/year_2022/day_07"
+    val inputs = Inputs(Exercise(2022, 7))
+    val one = Part.one(inputs, String::partOne)
+    val two = Part.two(inputs, String::partTwo)
 
-    val exampleInput = File("$pathPrefix/example.txt").readLines()
-    println("First test: ${test(exampleInput, "95437", ::solveFirst)}")
-    println("Second test: ${test(exampleInput, "24933642", ::solveSecond)}")
+    println(one.testProtocol("95437"))
+    println(two.testProtocol("24933642"))
 
-    val input = File("$pathPrefix/input.txt").readLines()
-    println("First result: ${solveFirst(input)}")
-    println("Second result: ${solveSecond(input)}")
+    println("Part 1:\n${one.run()}")
+    println("Part 2:\n${two.run()}")
 }

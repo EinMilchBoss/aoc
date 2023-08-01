@@ -1,7 +1,6 @@
 package year_2022.day_10
 
-import utils.test
-import java.io.File
+import utils.aoc.*
 
 data class Command(val instruction: String, val parameter: Int?)
 
@@ -65,46 +64,47 @@ fun RegisterHistory.image(): Crt {
 
 fun List<String>.parse(): List<Command> =
     map { line ->
-        line.split(' ').let { command ->
-            Command(command.first(), command.getOrNull(1)?.toInt())
-        }
+        line.split(' ')
+            .let { command ->
+                Command(
+                    command.first(),
+                    command.getOrNull(1)
+                        ?.toInt()
+                )
+            }
     }
 
-fun solveFirst(input: List<String>): String =
-    input.parse()
+fun String.partOne(): String =
+    lines().parse()
         .executeAll()
         .signalStrength()
         .toString()
 
-fun solveSecond(input: List<String>): String =
-    input.parse()
+fun String.partTwo(): String =
+    lines().parse()
         .executeAll()
         .image()
         .joinToString("\n") { it.joinToString("") }
 
 fun main() {
-    val pathPrefix = "./src/main/kotlin/year_2022/day_10"
+    val inputs = Inputs(Exercise(2022, 10))
+    val one = Part.one(inputs, String::partOne)
+    val two = Part.two(inputs, String::partTwo)
 
-    val exampleInput = File("$pathPrefix/example.txt").readLines()
-    println("First test: ${test(exampleInput, "13140", ::solveFirst)}")
+    println(one.testProtocol("13140"))
     println(
-        "Second test: ${
-            test(
-                exampleInput,
-                """
-                |##..##..##..##..##..##..##..##..##..##..
-                |###...###...###...###...###...###...###.
-                |####....####....####....####....####....
-                |#####.....#####.....#####.....#####.....
-                |######......######......######......####
-                |#######.......#######.......#######.....
-                """.trimMargin(),
-                ::solveSecond
-            )
-        }"
+        two.testProtocol(
+            """
+            |##..##..##..##..##..##..##..##..##..##..
+            |###...###...###...###...###...###...###.
+            |####....####....####....####....####....
+            |#####.....#####.....#####.....#####.....
+            |######......######......######......####
+            |#######.......#######.......#######.....
+            """.trimMargin()
+        )
     )
 
-    val input = File("$pathPrefix/input.txt").readLines()
-    println("First result: ${solveFirst(input)}")
-    println("Second result: \n${solveSecond(input)}")
+    println("Part 1:\n${one.run()}")
+    println("Part 2:\n${two.run()}")
 }
