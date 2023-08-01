@@ -1,33 +1,36 @@
 package year_2022.day_01
 
-import utils.test
-import java.io.File
+import utils.aoc.*
 
 fun List<String>.splitBlockSums() =
     this.joinToString("\n")
         .split("\n\n")
-        .map { it.split("\n").map(String::toInt).sum() }
+        .map {
+            it.split("\n")
+                .map(String::toInt)
+                .sum()
+        }
 
-fun solveFirst(input: List<String>): String =
-    input.splitBlockSums()
+fun String.partOne(): String =
+    lines().splitBlockSums()
         .max()
         .toString()
 
-fun solveSecond(input: List<String>): String =
-    input.splitBlockSums()
+fun String.partTwo(): String =
+    lines().splitBlockSums()
         .sortedByDescending { it }
         .take(3)
         .sum()
         .toString()
 
 fun main() {
-    val pathPrefix = "./src/main/kotlin/year_2022/day_01"
+    val inputs = Inputs(Exercise(2022, 1))
+    val one = Part.one(inputs, String::partOne)
+    val two = Part.two(inputs, String::partTwo)
 
-    val exampleInput = File("$pathPrefix/example.txt").readLines()
-    println("First test: ${test(exampleInput, "24000", ::solveFirst)}")
-    println("Second test: ${test(exampleInput, "45000", ::solveSecond)}")
+    println(one.testProtocol("24000"))
+    println(two.testProtocol("45000"))
 
-    val input = File("$pathPrefix/input.txt").readLines()
-    println("First result: ${solveFirst(input)}")
-    println("Second result: ${solveSecond(input)}")
+    println("Part 1:\n${one.run()}")
+    println("Part 2:\n${two.run()}")
 }
