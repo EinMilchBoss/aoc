@@ -1,7 +1,6 @@
 package year_2022.day_06
 
-import utils.test
-import java.io.File
+import utils.aoc.*
 
 fun String.allUnique(): Boolean =
     all(mutableSetOf<Char>()::add)
@@ -19,22 +18,23 @@ fun String.firstMarker(markerLength: Int): Int {
 }
 
 fun List<String>.solve(markerLength: Int): String =
-    first().firstMarker(markerLength).toString()
+    first().firstMarker(markerLength)
+        .toString()
 
-fun solveFirst(input: List<String>): String =
-    input.solve(4)
+fun String.partOne(): String =
+    lines().solve(4)
 
-fun solveSecond(input: List<String>): String =
-    input.solve(14)
+fun String.partTwo(): String =
+    lines().solve(14)
 
 fun main() {
-    val pathPrefix = "./src/main/kotlin/year_2022/day_06"
+    val inputs = Inputs(Exercise(2022, 6))
+    val one = Part.one(inputs, String::partOne)
+    val two = Part.two(inputs, String::partTwo)
 
-    val exampleInput = File("$pathPrefix/example.txt").readLines()
-    println("First test: ${test(exampleInput, "10", ::solveFirst)}")
-    println("Second test: ${test(exampleInput, "29", ::solveSecond)}")
+    println(one.testProtocol("10"))
+    println(two.testProtocol("29"))
 
-    val input = File("$pathPrefix/input.txt").readLines()
-    println("First result: ${solveFirst(input)}")
-    println("Second result: ${solveSecond(input)}")
+    println("Part 1:\n${one.run()}")
+    println("Part 2:\n${two.run()}")
 }
