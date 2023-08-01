@@ -1,11 +1,12 @@
 package year_2020.day_01
 
-import utils.test
-import java.io.File
+import utils.aoc.*
 
 fun multiplyTwoComplements(items: List<Int>, total: Int): Int =
-    items.map { it to total - it }.filter { (_, complement) -> items.any { it == complement } }
-        .map { it.first * it.second }.first()
+    items.map { it to total - it }
+        .filter { (_, complement) -> items.any { it == complement } }
+        .map { it.first * it.second }
+        .first()
 
 fun multiplyThreeComplements(items: List<Int>, total: Int): Int {
     for (i in 0..items.size - 3) {
@@ -19,24 +20,24 @@ fun multiplyThreeComplements(items: List<Int>, total: Int): Int {
     throw Error("No valid complements found.")
 }
 
-fun solveFirst(input: List<String>): String {
-    val inputInts = input.map(String::toInt)
+fun String.partOne(): String {
+    val inputInts = lines().map(String::toInt)
     return multiplyTwoComplements(inputInts, 2020).toString()
 }
 
-fun solveSecond(input: List<String>): String {
-    val inputInts = input.map(String::toInt)
+fun String.partTwo(): String {
+    val inputInts = lines().map(String::toInt)
     return multiplyThreeComplements(inputInts, 2020).toString()
 }
 
 fun main() {
-    val pathPrefix = "./src/main/kotlin/year_2020/day_01"
+    val inputs = Inputs(Exercise(2020, 1))
+    val one = Part.one(inputs, String::partOne)
+    val two = Part.two(inputs, String::partTwo)
 
-    val exampleInput = File("$pathPrefix/example.txt").readLines()
-    println("First test: ${test(exampleInput, "514579", ::solveFirst)}")
-    println("Second test: ${test(exampleInput, "241861950", ::solveSecond)}")
+    println(one.testProtocol("514579"))
+    println(two.testProtocol("241861950"))
 
-    val input = File("$pathPrefix/input.txt").readLines()
-    println("First result: ${solveFirst(input)}")
-    println("Second result: ${solveSecond(input)}")
+    println("Part 1:\n${one.run()}")
+    println("Part 2:\n${two.run()}")
 }
