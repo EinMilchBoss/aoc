@@ -1,29 +1,28 @@
 package year_2022.day_13
 
-import utils.test
+import utils.aoc.*
 import year_2022.day_13.packet.findDecoderKey
 import year_2022.day_13.packet.pair.parsePacketPairs
 import year_2022.day_13.packet.sumIndicesOfPairsInOrder
-import java.io.File
 
-fun solveFirst(input: List<String>): String =
-    input.joinToString("\n")
+fun String.partOne(): String =
+    lines().joinToString("\n")
         .parsePacketPairs()
         .sumIndicesOfPairsInOrder()
         .toString()
 
-fun solveSecond(input: List<String>): String =
-    input.findDecoderKey()
+fun String.partTwo(): String =
+    lines().findDecoderKey()
         .toString()
 
 fun main() {
-    val pathPrefix = "./src/main/kotlin/year_2022/day_13"
+    val inputs = Inputs(Exercise(2022, 13))
+    val one = Part.one(inputs, String::partOne)
+    val two = Part.two(inputs, String::partTwo)
 
-    val exampleInput = File("$pathPrefix/example.txt").readLines()
-    println("First test: ${test(exampleInput, "13", ::solveFirst)}")
-    println("Second test: ${test(exampleInput, "140", ::solveSecond)}")
+    println(one.testProtocol("13"))
+    println(two.testProtocol("140"))
 
-    val input = File("$pathPrefix/input.txt").readLines()
-    println("First result: ${solveFirst(input)}")
-    println("Second result: ${solveSecond(input)}")
+    println("Part 1: ${one.run()}")
+    println("Part 2: ${two.run()}")
 }
